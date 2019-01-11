@@ -1,18 +1,13 @@
 import numpy as np
 import math
 from sklearn.metrics import r2_score, explained_variance_score, precision_score
-
-def check_arrays(y_true, y_pred):
-    if len(y_true) != len(y_pred):
-        raise Exception("Predictions and actual are not of same length")
-    y_true, y_pred = np.array(y_true), np.array(y_pred)
-    return y_true, y_pred
+from sklearn.utils import check_array
 
 # Regression
 
 
 def adjusted_r2_score(y_true, y_pred, features_vector=None, num_features=None):
-    y_true, y_pred = check_arrays(y_true, y_pred)
+    y_true, y_pred = check_array(y_true), check_array(y_pred)
     if features_vector:
         if len(features_vector) >= len(y_true) - 1:
             raise Exception("Number of features is greater than number of rows and 1 degree of freedom")
@@ -34,7 +29,7 @@ def adjusted_r2_score(y_true, y_pred, features_vector=None, num_features=None):
 
 
 def adjusted_explained_variance_score(y_true, y_pred, features_vector=None, num_features=None):
-    y_true, y_pred = check_arrays(y_true, y_pred)
+    y_true, y_pred = check_array(y_true), check_array(y_pred)
     if features_vector:
         if len(features_vector) >= len(y_true) - 1:
             raise Exception("Number of features is greater than number of rows and 1 degree of freedom")
@@ -56,19 +51,19 @@ def adjusted_explained_variance_score(y_true, y_pred, features_vector=None, num_
 
 
 def mape_error(y_true, y_pred):
-    y_true, y_pred = check_arrays(y_true, y_pred)
+    y_true, y_pred = check_array(y_true), check_array(y_pred)
     return np.mean(np.abs((y_true - y_pred) / y_true)) * 100
 
 
 def smape_score(y_true, y_pred):
-    y_true, y_pred = check_arrays(y_true, y_pred)
+    y_true, y_pred = check_array(y_true), check_array(y_pred)
     error = np.abs(y_true - y_pred)
     total = np.abs(y_true) + np.abs(y_pred)
     return 100 * np.sum(error / total) / len(error)
 
 
 def root_mean_squared_error(y_true, y_pred):
-    y_true, y_pred = check_arrays(y_true, y_pred)
+    y_true, y_pred = check_array(y_true), check_array(y_pred)
     n = len(y_true)
     return math.sqrt(np.sum((y_true - y_pred)**2) / n)
 
@@ -76,7 +71,7 @@ def root_mean_squared_error(y_true, y_pred):
 
 
 def get_classification_labels(y_true, y_pred):
-    y_true, y_pred = check_arrays(y_true, y_pred)
+    y_true, y_pred = check_array(y_true), check_array(y_pred)
     if len(np.unique(y_true)) > 2:
         raise Exception("We have more than two classes for a Binary problem")
     if len(np.unique(y_pred)) > 2:
@@ -91,7 +86,7 @@ def get_classification_labels(y_true, y_pred):
 
 
 def specificity_score(y_true, y_pred, type='Binary'):
-    y_true, y_pred = check_arrays(y_true, y_pred)
+    y_true, y_pred = check_array(y_true), check_array(y_pred)
     if type.casefold() == 'binary':
         tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
         return tn / (tn + fp)
@@ -99,7 +94,7 @@ def specificity_score(y_true, y_pred, type='Binary'):
 
 def sensitivity_score(y_true, y_pred, type='Binary'):
     """This is exactly the same as recall"""
-    y_true, y_pred = check_arrays(y_true, y_pred)
+    y_true, y_pred = check_array(y_true), check_array(y_pred)
     if type.casefold() == 'binary':
         tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
         return tp / (tp + fn)
@@ -111,14 +106,14 @@ def power_score(y_true, y_pred, type='Binary'):
 
 
 def negative_predictive_score(y_true, y_pred, type='Binary'):
-    y_true, y_pred = check_arrays(y_true, y_pred)
+    y_true, y_pred = check_array(y_true), check_array(y_pred)
     if type.casefold() == 'binary':
         tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
         return tn / (tn + fn)
 
 
 def false_negative_score(y_true, y_pred, type='Binary'):
-    y_true, y_pred = check_arrays(y_true, y_pred)
+    y_true, y_pred = check_array(y_true), check_array(y_pred)
     if type.casefold() == 'binary':
         tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
         return fn / (fn + tp)
@@ -130,7 +125,7 @@ def type_two_error_score(y_true, y_pred, type='Binary'):
 
 
 def false_positive_score(y_true, y_pred, type='Binary'):
-    y_true, y_pred = check_arrays(y_true, y_pred)
+    y_true, y_pred = check_array(y_true), check_array(y_pred)
     if type.casefold() == 'binary':
         tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
         return fp / (fp + tn)
@@ -142,14 +137,14 @@ def type_one_error_score(y_true, y_pred, type='Binary'):
 
 
 def false_discovery_score(y_true, y_pred, type='Binary'):
-    y_true, y_pred = check_arrays(y_true, y_pred)
+    y_true, y_pred = check_array(y_true), check_array(y_pred)
     if type.casefold() == 'binary':
         tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
         return fp / (fp + tp)
 
 
 def false_omission_rate(y_true, y_pred, type='Binary'):
-    y_true, y_pred = check_arrays(y_true, y_pred)
+    y_true, y_pred = check_array(y_true), check_array(y_pred)
     if type.casefold() == 'binary':
         tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
         return fn / (fn + tn)
