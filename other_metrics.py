@@ -1,6 +1,6 @@
 import numpy as np
 import math
-from sklearn.metrics import r2_score, explained_variance_score, precision_score
+from sklearn.metrics import r2_score, explained_variance_score
 from sklearn.utils import check_array
 
 # Regression
@@ -67,7 +67,7 @@ def root_mean_squared_error(y_true, y_pred):
     n = len(y_true)
     return math.sqrt(np.sum((y_true - y_pred)**2) / n)
 
-# Binary Classification
+# Classification
 
 
 def get_classification_labels(y_true, y_pred):
@@ -85,82 +85,261 @@ def get_classification_labels(y_true, y_pred):
     return true_positive, false_positive, false_negative, true_negative
 
 
-def specificity_score(y_true, y_pred, type='Binary'):
+def specificity_score(y_true, y_pred, type='Binary', positive_class=None):
     y_true, y_pred = check_array(y_true), check_array(y_pred)
     if type.casefold() == 'binary':
         tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
-        return tn / (tn + fp)
+    elif type.casefold() == 'multiclass':
+        if positive_class:
+            if isinstance(positive_class, str) or isinstance(positive_class, int):
+                new_y_true = np.where(y_true == positive_class, 1, 0)
+                new_y_pred = np.where(y_pred == positive_class, 1, 0)
+                tp, fp, fn, tn = get_classification_labels(new_y_true, new_y_pred)
+            else:
+                raise Exception("Cannot discern positive class for multiclass problem")
+        else:
+            raise Exception("Cannot calculate specificity score with None")
+    return tn / (tn + fp)
 
 
-def sensitivity_score(y_true, y_pred, type='Binary'):
+def average_specificity_score(y_true, y_pred):
+    if len(np.unique(y_true)) < 3:
+        return specificity_score(y_true, y_pred)
+    else:
+        overall_score = 0
+        unique_classes = np.unique(y_true)
+        for pos_class in unique_classes:
+            overall_score += specificity_score(y_true, y_pred, type='multiclass', positive_class=pos_class)
+        return overall_score / len(unique_classes)
+
+
+def sensitivity_score(y_true, y_pred, type='Binary', positive_class=None):
     """This is exactly the same as recall"""
     y_true, y_pred = check_array(y_true), check_array(y_pred)
     if type.casefold() == 'binary':
         tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
-        return tp / (tp + fn)
+    elif type.casefold() == 'multiclass':
+        if positive_class:
+            if isinstance(positive_class, str):
+                new_y_true = np.where(y_true == positive_class, 1, 0)
+                new_y_pred = np.where(y_pred == positive_class, 1, 0)
+                tp, fp, fn, tn = get_classification_labels(new_y_true, new_y_pred)
+            else:
+                raise Exception("Cannot discern positive class for multiclass problem")
+        else:
+            raise Exception("Cannot calculate sensitivity score with None")
+    return tp / (tp + fn)
 
 
-def power_score(y_true, y_pred, type='Binary'):
+def average_sensitivity_score(y_true, y_pred):
+    if len(np.unique(y_true)) < 3:
+        return sensitivity_score(y_true, y_pred)
+    else:
+        overall_score = 0
+        unique_classes = np.unique(y_true)
+        for pos_class in unique_classes:
+            overall_score += sensitivity_score(y_true, y_pred, type='multiclass', positive_class=pos_class)
+        return overall_score / len(unique_classes)
+
+
+def power_score(y_true, y_pred, type='Binary', positive_class=None):
     """This is just another way of saying sensitivity"""
-    return sensitivity_score(y_true, y_pred, type=type)
+    return sensitivity_score(y_true, y_pred, type=type, positive_class=positive_class)
 
 
-def negative_predictive_score(y_true, y_pred, type='Binary'):
+def average_power_score(y_true, y_pred):
+    return average_sensitivity_score(y_true, y_pred)
+
+
+def negative_predictive_score(y_true, y_pred, type='Binary', positive_class=None):
     y_true, y_pred = check_array(y_true), check_array(y_pred)
     if type.casefold() == 'binary':
         tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
-        return tn / (tn + fn)
+    elif type.casefold() == 'multiclass':
+        if positive_class:
+            if isinstance(positive_class, str):
+                new_y_true = np.where(y_true == positive_class, 1, 0)
+                new_y_pred = np.where(y_pred == positive_class, 1, 0)
+                tp, fp, fn, tn = get_classification_labels(new_y_true, new_y_pred)
+            else:
+                raise Exception("Cannot discern positive class for multiclass problem")
+        else:
+            raise Exception("Cannot calculate negative predictive score with None")
+    return tn / (tn + fn)
 
 
-def false_negative_score(y_true, y_pred, type='Binary'):
+def average_negative_predictive_score(y_true, y_pred):
+    if len(np.unique(y_true)) < 3:
+        return negative_predictive_score(y_true, y_pred)
+    else:
+        overall_score = 0
+        unique_classes = np.unique(y_true)
+        for pos_class in unique_classes:
+            overall_score += negative_predictive_score(y_true, y_pred, type='multiclass', positive_class=pos_class)
+        return overall_score / len(unique_classes)
+
+
+def false_negative_score(y_true, y_pred, type='Binary', positive_class=None):
     y_true, y_pred = check_array(y_true), check_array(y_pred)
     if type.casefold() == 'binary':
         tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
-        return fn / (fn + tp)
+    elif type.casefold() == 'multiclass':
+        if positive_class:
+            if isinstance(positive_class, str):
+                new_y_true = np.where(y_true == positive_class, 1, 0)
+                new_y_pred = np.where(y_pred == positive_class, 1, 0)
+                tp, fp, fn, tn = get_classification_labels(new_y_true, new_y_pred)
+            else:
+                raise Exception("Cannot discern positive class for multiclass problem")
+        else:
+            raise Exception("Cannot calculate false negative score with None")
+    return fn / (fn + tp)
 
 
-def type_two_error_score(y_true, y_pred, type='Binary'):
+def average_false_negative_score(y_true, y_pred):
+    if len(np.unique(y_true)) < 3:
+        return false_negative_score(y_true, y_pred)
+    else:
+        overall_score = 0
+        unique_classes = np.unique(y_true)
+        for pos_class in unique_classes:
+            overall_score += false_negative_score(y_true, y_pred, type='multiclass', positive_class=pos_class)
+        return overall_score / len(unique_classes)
+
+
+def type_two_error_score(y_true, y_pred, type='Binary', positive_class=None):
     """This is exactly the same as false negative score """
-    return false_negative_score(y_true, y_pred, type=type)
+    return false_negative_score(y_true, y_pred, type=type, positive_class=positive_class)
 
 
-def false_positive_score(y_true, y_pred, type='Binary'):
+def average_type_two_error_score(y_true, y_pred):
+    return average_false_negative_score(y_true, y_pred)
+
+
+def false_positive_score(y_true, y_pred, type='Binary', positive_class=None):
     y_true, y_pred = check_array(y_true), check_array(y_pred)
     if type.casefold() == 'binary':
         tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
-        return fp / (fp + tn)
+    elif type.casefold() == 'multiclass':
+        if positive_class:
+            if isinstance(positive_class, str):
+                new_y_true = np.where(y_true == positive_class, 1, 0)
+                new_y_pred = np.where(y_pred == positive_class, 1, 0)
+                tp, fp, fn, tn = get_classification_labels(new_y_true, new_y_pred)
+            else:
+                raise Exception("Cannot discern positive class for multiclass problem")
+        else:
+            raise Exception("Cannot calculate false positive score with None")
+    return fp / (fp + tn)
 
 
-def type_one_error_score(y_true, y_pred, type='Binary'):
+def average_false_positive_score(y_true, y_pred):
+    if len(np.unique(y_true)) < 3:
+        return false_positive_score(y_true, y_pred)
+    else:
+        overall_score = 0
+        unique_classes = np.unique(y_true)
+        for pos_class in unique_classes:
+            overall_score += false_positive_score(y_true, y_pred, type='multiclass', positive_class=pos_class)
+        return overall_score / len(unique_classes)
+
+
+def type_one_error_score(y_true, y_pred, type='Binary', positive_class=None):
     """This is exactly the same as false positive score"""
-    return false_positive_score(y_true, y_pred, type=type)
+    return false_positive_score(y_true, y_pred, type=type, positive_class=positive_class)
 
 
-def false_discovery_score(y_true, y_pred, type='Binary'):
+def average_type_one_error_score(y_true, y_pred):
+    return average_false_positive_score(y_true, y_pred)
+
+
+def false_discovery_score(y_true, y_pred, type='Binary', positive_class=None):
     y_true, y_pred = check_array(y_true), check_array(y_pred)
     if type.casefold() == 'binary':
         tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
-        return fp / (fp + tp)
+    elif type.casefold() == 'multiclass':
+        if positive_class:
+            if isinstance(positive_class, str):
+                new_y_true = np.where(y_true == positive_class, 1, 0)
+                new_y_pred = np.where(y_pred == positive_class, 1, 0)
+                tp, fp, fn, tn = get_classification_labels(new_y_true, new_y_pred)
+            else:
+                raise Exception("Cannot discern positive class for multiclass problem")
+        else:
+            raise Exception("Cannot calculate false discovery score with None")
+    return fp / (fp + tp)
 
 
-def false_omission_rate(y_true, y_pred, type='Binary'):
+def average_false_discovery_score(y_true, y_pred):
+    if len(np.unique(y_true)) < 3:
+        return false_discovery_score(y_true, y_pred)
+    else:
+        overall_score = 0
+        unique_classes = np.unique(y_true)
+        for pos_class in unique_classes:
+            overall_score += false_discovery_score(y_true, y_pred, type='multiclass', positive_class=pos_class)
+        return overall_score / len(unique_classes)
+
+
+def false_omission_rate(y_true, y_pred, type='Binary', positive_class=None):
     y_true, y_pred = check_array(y_true), check_array(y_pred)
     if type.casefold() == 'binary':
         tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
-        return fn / (fn + tn)
+    elif type.casefold() == 'multiclass':
+        if positive_class:
+            if isinstance(positive_class, str):
+                new_y_true = np.where(y_true == positive_class, 1, 0)
+                new_y_pred = np.where(y_pred == positive_class, 1, 0)
+                tp, fp, fn, tn = get_classification_labels(new_y_true, new_y_pred)
+            else:
+                raise Exception("Cannot discern positive class for multiclass problem")
+        else:
+            raise Exception("Cannot calculate false omission score with None")
+    return fn / (fn + tn)
 
 
-def j_score(y_true, y_pred, type='Binary'):
-    return sensitivity_score(y_true, y_pred, type=type) + specificity_score(y_true, y_pred, type=type) - 1
+def average_false_omission_rate(y_true, y_pred):
+    if len(np.unique(y_true)) < 3:
+        return false_omission_rate(y_true, y_pred)
+    else:
+        overall_score = 0
+        unique_classes = np.unique(y_true)
+        for pos_class in unique_classes:
+            overall_score += false_omission_rate(y_true, y_pred, type='multiclass', positive_class=pos_class)
+        return overall_score / len(unique_classes)
 
 
-def markedness_score(y_true, y_pred, type='Binary'):
-    return precision_score(y_true, y_pred) + negative_predictive_score(y_true, y_pred, type=type) - 1
+def j_score(y_true, y_pred, type='Binary', positive_class=None):
+    return sensitivity_score(y_true, y_pred, type=type, positive_class=positive_class) + \
+           specificity_score(y_true, y_pred, type=type, positive_class=positive_class) - 1
 
 
-def likelihood_ratio_positive(y_true, y_pred, type='Binary'):
-    return sensitivity_score(y_true, y_pred, type=type) / (1 - specificity_score(y_true, y_pred, type=type))
+def markedness_score(y_true, y_pred, type='Binary', positive_class=None):
+
+    def precision_score(y_true, y_pred, type='Binary', positive_class=None):
+        y_true, y_pred = check_array(y_true), check_array(y_pred)
+        if type.casefold() == 'binary':
+            tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
+        elif type.casefold() == 'multiclass':
+            if positive_class:
+                if isinstance(positive_class, str):
+                    new_y_true = np.where(y_true == positive_class, 1, 0)
+                    new_y_pred = np.where(y_pred == positive_class, 1, 0)
+                    tp, fp, fn, tn = get_classification_labels(new_y_true, new_y_pred)
+                else:
+                    raise Exception("Cannot discern positive class for multiclass problem")
+            else:
+                raise Exception("Cannot calculate precision score with None")
+        return tp / (tp + fp)
+
+    return precision_score(y_true, y_pred, type=type, positive_class=positive_class) + negative_predictive_score(y_true, y_pred, type=type) - 1
 
 
-def likelihood_ratio_negative(y_true, y_pred, type='Binary'):
-    return specificity_score(y_true, y_pred, type=type) / (1 - sensitivity_score(y_true, y_pred, type=type))
+def likelihood_ratio_positive(y_true, y_pred, type='Binary', positive_class=None):
+    return sensitivity_score(y_true, y_pred, type=type, positive_class=positive_class) / \
+           (1 - specificity_score(y_true, y_pred, type=type, positive_class=positive_class))
+
+
+def likelihood_ratio_negative(y_true, y_pred, type='Binary', positive_class=None):
+    return specificity_score(y_true, y_pred, type=type, positive_class=positive_class) / \
+           (1 - sensitivity_score(y_true, y_pred, type=type, positive_class=positive_class))
