@@ -1,13 +1,14 @@
 import numpy as np
 import math
 from sklearn.metrics import r2_score, explained_variance_score
-from sklearn.utils import check_array
+from sklearn.metrics.classification import _check_targets
+from sklearn.metrics.regression import _check_reg_targets
 
 # Regression
 
 
 def adjusted_r2_score(y_true, y_pred, features_vector=None, num_features=None):
-    y_true, y_pred = check_array(y_true), check_array(y_pred)
+    y_type, y_true, y_pred, multioutput = _check_reg_targets(y_true, y_pred, multioutput='raw_values')
     if features_vector:
         if len(features_vector) >= len(y_true) - 1:
             raise Exception("Number of features is greater than number of rows and 1 degree of freedom")
@@ -29,7 +30,7 @@ def adjusted_r2_score(y_true, y_pred, features_vector=None, num_features=None):
 
 
 def adjusted_explained_variance_score(y_true, y_pred, features_vector=None, num_features=None):
-    y_true, y_pred = check_array(y_true), check_array(y_pred)
+    y_type, y_true, y_pred, multioutput = _check_reg_targets(y_true, y_pred, multioutput='raw_values')
     if features_vector:
         if len(features_vector) >= len(y_true) - 1:
             raise Exception("Number of features is greater than number of rows and 1 degree of freedom")
@@ -51,19 +52,19 @@ def adjusted_explained_variance_score(y_true, y_pred, features_vector=None, num_
 
 
 def mape_error(y_true, y_pred):
-    y_true, y_pred = check_array(y_true), check_array(y_pred)
+    y_type, y_true, y_pred, multioutput = _check_reg_targets(y_true, y_pred, multioutput='raw_values')
     return np.mean(np.abs((y_true - y_pred) / y_true)) * 100
 
 
 def smape_score(y_true, y_pred):
-    y_true, y_pred = check_array(y_true), check_array(y_pred)
+    y_type, y_true, y_pred, multioutput = _check_reg_targets(y_true, y_pred, multioutput='raw_values')
     error = np.abs(y_true - y_pred)
     total = np.abs(y_true) + np.abs(y_pred)
     return 100 * np.sum(error / total) / len(error)
 
 
 def root_mean_squared_error(y_true, y_pred):
-    y_true, y_pred = check_array(y_true), check_array(y_pred)
+    y_type, y_true, y_pred, multioutput = _check_reg_targets(y_true, y_pred, multioutput='raw_values')
     n = len(y_true)
     return math.sqrt(np.sum((y_true - y_pred)**2) / n)
 
@@ -71,7 +72,7 @@ def root_mean_squared_error(y_true, y_pred):
 
 
 def get_classification_labels(y_true, y_pred):
-    y_true, y_pred = check_array(y_true), check_array(y_pred)
+    type_true, y_true, y_pred = _check_targets(y_true, y_pred)
     if len(np.unique(y_true)) > 2:
         raise Exception("We have more than two classes for a Binary problem")
     if len(np.unique(y_pred)) > 2:
@@ -86,7 +87,7 @@ def get_classification_labels(y_true, y_pred):
 
 
 def specificity_score(y_true, y_pred, type='Binary', positive_class=None):
-    y_true, y_pred = check_array(y_true), check_array(y_pred)
+    type_true, y_true, y_pred = _check_targets(y_true, y_pred)
     if type.casefold() == 'binary':
         tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
     elif type.casefold() == 'multiclass':
@@ -115,12 +116,12 @@ def average_specificity_score(y_true, y_pred):
 
 def sensitivity_score(y_true, y_pred, type='Binary', positive_class=None):
     """This is exactly the same as recall"""
-    y_true, y_pred = check_array(y_true), check_array(y_pred)
+    type_true, y_true, y_pred = _check_targets(y_true, y_pred)
     if type.casefold() == 'binary':
         tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
     elif type.casefold() == 'multiclass':
         if positive_class:
-            if isinstance(positive_class, str):
+            if isinstance(positive_class, str) or isinstance(positive_class, int):
                 new_y_true = np.where(y_true == positive_class, 1, 0)
                 new_y_pred = np.where(y_pred == positive_class, 1, 0)
                 tp, fp, fn, tn = get_classification_labels(new_y_true, new_y_pred)
@@ -152,12 +153,12 @@ def average_power_score(y_true, y_pred):
 
 
 def negative_predictive_score(y_true, y_pred, type='Binary', positive_class=None):
-    y_true, y_pred = check_array(y_true), check_array(y_pred)
+    type_true, y_true, y_pred = _check_targets(y_true, y_pred)
     if type.casefold() == 'binary':
         tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
     elif type.casefold() == 'multiclass':
         if positive_class:
-            if isinstance(positive_class, str):
+            if isinstance(positive_class, str) or isinstance(positive_class, int):
                 new_y_true = np.where(y_true == positive_class, 1, 0)
                 new_y_pred = np.where(y_pred == positive_class, 1, 0)
                 tp, fp, fn, tn = get_classification_labels(new_y_true, new_y_pred)
@@ -180,12 +181,12 @@ def average_negative_predictive_score(y_true, y_pred):
 
 
 def false_negative_score(y_true, y_pred, type='Binary', positive_class=None):
-    y_true, y_pred = check_array(y_true), check_array(y_pred)
+    type_true, y_true, y_pred = _check_targets(y_true, y_pred)
     if type.casefold() == 'binary':
         tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
     elif type.casefold() == 'multiclass':
         if positive_class:
-            if isinstance(positive_class, str):
+            if isinstance(positive_class, str) or isinstance(positive_class, int):
                 new_y_true = np.where(y_true == positive_class, 1, 0)
                 new_y_pred = np.where(y_pred == positive_class, 1, 0)
                 tp, fp, fn, tn = get_classification_labels(new_y_true, new_y_pred)
@@ -217,12 +218,12 @@ def average_type_two_error_score(y_true, y_pred):
 
 
 def false_positive_score(y_true, y_pred, type='Binary', positive_class=None):
-    y_true, y_pred = check_array(y_true), check_array(y_pred)
+    type_true, y_true, y_pred = _check_targets(y_true, y_pred)
     if type.casefold() == 'binary':
         tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
     elif type.casefold() == 'multiclass':
         if positive_class:
-            if isinstance(positive_class, str):
+            if isinstance(positive_class, str) or isinstance(positive_class, int):
                 new_y_true = np.where(y_true == positive_class, 1, 0)
                 new_y_pred = np.where(y_pred == positive_class, 1, 0)
                 tp, fp, fn, tn = get_classification_labels(new_y_true, new_y_pred)
@@ -254,12 +255,12 @@ def average_type_one_error_score(y_true, y_pred):
 
 
 def false_discovery_score(y_true, y_pred, type='Binary', positive_class=None):
-    y_true, y_pred = check_array(y_true), check_array(y_pred)
+    type_true, y_true, y_pred = _check_targets(y_true, y_pred)
     if type.casefold() == 'binary':
         tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
     elif type.casefold() == 'multiclass':
         if positive_class:
-            if isinstance(positive_class, str):
+            if isinstance(positive_class, str) or isinstance(positive_class, int):
                 new_y_true = np.where(y_true == positive_class, 1, 0)
                 new_y_pred = np.where(y_pred == positive_class, 1, 0)
                 tp, fp, fn, tn = get_classification_labels(new_y_true, new_y_pred)
@@ -282,12 +283,12 @@ def average_false_discovery_score(y_true, y_pred):
 
 
 def false_omission_rate(y_true, y_pred, type='Binary', positive_class=None):
-    y_true, y_pred = check_array(y_true), check_array(y_pred)
+    type_true, y_true, y_pred = _check_targets(y_true, y_pred)
     if type.casefold() == 'binary':
         tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
     elif type.casefold() == 'multiclass':
         if positive_class:
-            if isinstance(positive_class, str):
+            if isinstance(positive_class, str) or isinstance(positive_class, int):
                 new_y_true = np.where(y_true == positive_class, 1, 0)
                 new_y_pred = np.where(y_pred == positive_class, 1, 0)
                 tp, fp, fn, tn = get_classification_labels(new_y_true, new_y_pred)
@@ -317,12 +318,12 @@ def j_score(y_true, y_pred, type='Binary', positive_class=None):
 def markedness_score(y_true, y_pred, type='Binary', positive_class=None):
 
     def precision_score(y_true, y_pred, type='Binary', positive_class=None):
-        y_true, y_pred = check_array(y_true), check_array(y_pred)
+        type_true, y_true, y_pred = _check_targets(y_true, y_pred)
         if type.casefold() == 'binary':
             tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
         elif type.casefold() == 'multiclass':
             if positive_class:
-                if isinstance(positive_class, str):
+                if isinstance(positive_class, str) or isinstance(positive_class, int):
                     new_y_true = np.where(y_true == positive_class, 1, 0)
                     new_y_pred = np.where(y_pred == positive_class, 1, 0)
                     tp, fp, fn, tn = get_classification_labels(new_y_true, new_y_pred)
