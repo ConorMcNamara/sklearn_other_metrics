@@ -1,4 +1,2 @@
 # sklearn_other_metrics
-Includes regression and binary classification metrics not incorporated in sklearn's libraries.
-
-I tried to avoid using any sklearn library functions unless absolutely necessary. 
+Includes regression and classification metrics not incorporated in sklearn's libraries, such as SMAPE as well as sensitivity and specificity. 
