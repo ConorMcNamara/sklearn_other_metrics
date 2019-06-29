@@ -1,5 +1,6 @@
 import numpy as np
 import math
+import pandas as pd
 from sklearn.metrics import r2_score, explained_variance_score
 from sklearn.metrics.classification import _check_targets
 from sklearn.metrics.regression import _check_reg_targets
@@ -51,8 +52,10 @@ def adjusted_explained_variance_score(y_true, y_pred, features_vector=None, num_
     return 1 - (1 - evs) * (n - 1) / (n - p - 1)
 
 
-def mape_error(y_true, y_pred):
+def mape_score(y_true, y_pred):
     y_type, y_true, y_pred, multioutput = _check_reg_targets(y_true, y_pred, multioutput='raw_values')
+    if 0 in y_true:
+        raise Exception('Cannot divide by zero')
     return np.mean(np.abs((y_true - y_pred) / y_true)) * 100
 
 
@@ -67,6 +70,14 @@ def root_mean_squared_error(y_true, y_pred):
     y_type, y_true, y_pred, multioutput = _check_reg_targets(y_true, y_pred, multioutput='raw_values')
     n = len(y_true)
     return math.sqrt(np.sum((y_true - y_pred)**2) / n)
+
+
+def group_mean_log_mae(y_true, y_pred, groups, floor=1e-9):
+    y_type, y_true, y_pred, multioutput = _check_reg_targets(y_true, y_pred, multioutput='raw_values')
+    y_true = pd.Series([i[0] for i in y_true])
+    y_pred = pd.Series([i[0] for i in y_pred])
+    maes = (y_true - y_pred).abs().groupby(groups).mean()
+    return np.log(maes.map(lambda x: max(x, floor))).mean()
 
 # Classification
 

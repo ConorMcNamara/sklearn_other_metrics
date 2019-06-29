@@ -1,6 +1,7 @@
 import unittest
 import other_metrics
 
+
 class TestOtherMetrics(unittest.TestCase):
 
     def test_adjustedR2Score_Dictionary_Exception(self):
@@ -80,6 +81,27 @@ class TestOtherMetrics(unittest.TestCase):
         y_true = [0, 1, 2, 3]
         y_pred = [0, 1, 2, 3]
         self.assertEqual(other_metrics.adjusted_explained_variance_score(y_true, y_pred, num_features=2), 1.0)
+
+    def test_mapeScore_ZeroInYTrue_Nan(self):
+        y_true = [0, 2, 3, 4]
+        y_pred = [1, 1, 2, 3]
+        self.assertRaises(Exception, other_metrics.mape_score, y_true, y_pred)
+
+    def test_mapeScore_PerfectCorrelation_Zero(self):
+        y_true = [1, 2, 3, 4]
+        y_pred = [1, 2, 3, 4]
+        self.assertEqual(other_metrics.mape_score(y_true, y_pred), 0.0)
+
+    def test_smapeError_PerfectCorrelation_Zero(self):
+        y_true = [1, 2, 3, 4]
+        y_pred = [1, 2, 3, 4]
+        self.assertEqual(other_metrics.smape_score(y_true, y_pred), 0.0)
+
+    def test_groupMeanLogMAE_PerfectCorrelation_NegativeTwenty(self):
+        y_true = [0, 1, 2, 3]
+        y_pred = [0, 1, 2, 3]
+        groups = [1, 1, 2, 2]
+        self.assertAlmostEqual(other_metrics.group_mean_log_mae(y_true, y_pred, groups), -20.72326583694641)
 
     def test_getClassificationLabels_MoreThanTwoClasses_Exception(self):
         y_true = [0, 1, 2, 3, 4]
