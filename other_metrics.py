@@ -230,7 +230,7 @@ def group_mean_log_mae(
 def get_classification_labels(
     y_true: Union[Sequence[int], np.ndarray, pd.Series],
     y_pred: Union[Sequence[int], np.ndarray, pd.Series],
-) -> Sequence[int, int, int, int]:
+) -> Sequence[int]:
     """Calculates the true positive, false positive, false negative and true negative values for a classification
     problem.
 
@@ -262,7 +262,7 @@ def get_classification_labels(
 def specificity_score(
     y_true: Union[Sequence[int], np.ndarray, pd.Series],
     y_pred: Union[Sequence[int], np.ndarray, pd.Series],
-    problem: str = "Binary",
+    is_binary: bool = True,
     positive_class: Union[str, int] = None,
 ) -> float:
     """Calculates the specificity of a classification problem
@@ -270,10 +270,10 @@ def specificity_score(
     Parameters
     ----------
     y_true: list or array like
-        The true, or the expected, values of our problem
+        The true, or the expected, values of our model
     y_pred: list or array like
-        The predicted values of our problem
-    problem: {'binary', 'multiclass'}
+        The predicted values of our model
+    is_binary: bool, default=True
         Whether our problem is a binary classification or a multiclassification problem
     positive_class: int or str, default=None
         If problem=='multiclass' then the class we are denoting as 'succcess' or 'positive' (i.e., the one marked as a 1).
@@ -283,9 +283,9 @@ def specificity_score(
     The specificity score
     """
     problem_true, y_true, y_pred = _check_targets(y_true, y_pred)
-    if problem.casefold() == "binary":
+    if is_binary:
         tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
-    elif problem.casefold() == "multiclass":
+    else:
         if positive_class:
             if isinstance(positive_class, str) or isinstance(positive_class, int):
                 new_y_true = np.where(y_true == positive_class, 1, 0)
@@ -295,8 +295,6 @@ def specificity_score(
                 raise TypeError("Cannot discern positive class for multiclass problem")
         else:
             raise ValueError("Cannot calculate specificity score with None")
-    else:
-        raise ValueError("Cannot determine problem type")
     return tn / (tn + fp)
 
 
@@ -325,7 +323,7 @@ def average_specificity_score(
         unique_classes = np.unique(y_true)
         for pos_class in unique_classes:
             overall_score += specificity_score(
-                y_true, y_pred, problem="multiclass", positive_class=pos_class
+                y_true, y_pred, is_binary=False, positive_class=pos_class
             )
         return overall_score / len(unique_classes)
 
@@ -333,7 +331,7 @@ def average_specificity_score(
 def sensitivity_score(
     y_true: Union[Sequence[int], np.ndarray, pd.Series],
     y_pred: Union[Sequence[int], np.ndarray, pd.Series],
-    problem: str = "Binary",
+    is_binary: True,
     positive_class: Union[str, int] = None,
 ) -> float:
     """This is exactly the same as recall
@@ -341,10 +339,10 @@ def sensitivity_score(
     Parameters
     ----------
     y_true: list or array like
-        The true, or the expected, values of our problem
+        The true, or the expected, values of our model
     y_pred: list or array like
-        The predicted values of our problem
-    problem: str, ['binary', 'multiclass'], default='binary'
+        The predicted values of our model
+    is_binary: bool, default=True
         Whether our problem is a binary classification or a multiclassification problem
     positive_class: int or str, default=None
         If problem=='multiclass' then the class we are denoting as 'succcess' or 'positive' (i.e., the one marked as a 1).
@@ -354,9 +352,9 @@ def sensitivity_score(
     The sensitivity score
     """
     problem_true, y_true, y_pred = _check_targets(y_true, y_pred)
-    if problem.casefold() == "binary":
+    if is_binary:
         tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
-    elif problem.casefold() == "multiclass":
+    else:
         if positive_class:
             if isinstance(positive_class, str) or isinstance(positive_class, int):
                 new_y_true = np.where(y_true == positive_class, 1, 0)
@@ -366,8 +364,6 @@ def sensitivity_score(
                 raise Exception("Cannot discern positive class for multiclass problem")
         else:
             raise Exception("Cannot calculate sensitivity score with None")
-    else:
-        raise ValueError("Cannot determine problem type")
     return tp / (tp + fn)
 
 
@@ -390,13 +386,13 @@ def average_sensitivity_score(
     The average of each sensitivity score for each group/class
     """
     if len(np.unique(y_true)) < 3:
-        return sensitivity_score(y_true, y_pred)
+        return sensitivity_score(y_true, y_pred, is_binary=True)
     else:
         overall_score = 0
         unique_classes = np.unique(y_true)
         for pos_class in unique_classes:
             overall_score += sensitivity_score(
-                y_true, y_pred, problem="multiclass", positive_class=pos_class
+                y_true, y_pred, is_binary=False, positive_class=pos_class
             )
         return overall_score / len(unique_classes)
 
@@ -404,7 +400,7 @@ def average_sensitivity_score(
 def power_score(
     y_true: Union[Sequence[int], np.ndarray, pd.Series],
     y_pred: Union[Sequence[int], np.ndarray, pd.Series],
-    problem: str = "Binary",
+    is_binary: bool = True,
     positive_class: Union[str, int] = None,
 ) -> float:
     """This is just another way of saying sensitivity
@@ -412,10 +408,10 @@ def power_score(
     Parameters
     ----------
     y_true: list or array like
-        The true, or the expected, values of our problem
+        The true, or the expected, values of our model
     y_pred: list or array like
-        The predicted values of our problem
-    problem: str, ['binary', 'multiclass'], default='binary'
+        The predicted values of our model
+    is_binary: bool, default = True
         Whether our problem is a binary classification or a multiclassification problem
     positive_class: int or str, default=None
         If problem=='multiclass' then the class we are denoting as 'succcess' or 'positive' (i.e., the one marked as a 1).
@@ -425,7 +421,7 @@ def power_score(
     The sensitivity score
     """
     return sensitivity_score(
-        y_true, y_pred, problem=problem, positive_class=positive_class
+        y_true, y_pred, is_binary=is_binary, positive_class=positive_class
     )
 
 
@@ -452,7 +448,7 @@ def average_power_score(
 def negative_predictive_score(
     y_true: Union[Sequence[int], np.ndarray, pd.Series],
     y_pred: Union[Sequence[int], np.ndarray, pd.Series],
-    problem: str = "Binary",
+    is_binary: bool = True,
     positive_class: Union[str, int] = None,
 ) -> float:
     """Also known as problem II error score. Calculates the percentage of true negatives we correctly identified compared to
@@ -461,10 +457,10 @@ def negative_predictive_score(
     Parameters
     ----------
     y_true: list or array like
-        The true, or the expected, values of our problem
+        The true, or the expected, values of our model
     y_pred: list or array like
-        The predicted values of our problem
-    problem: str, ['binary', 'multiclass'], default='binary'
+        The predicted values of our model
+    is_binary: bool, default = True
         Whether our problem is a binary classification or a multiclassification problem
     positive_class: int or str, default=None
         If problem=='multiclass' then the class we are denoting as 'succcess' or 'positive' (i.e., the one marked as a 1).
@@ -474,9 +470,9 @@ def negative_predictive_score(
     The negative predictive score
     """
     problem_true, y_true, y_pred = _check_targets(y_true, y_pred)
-    if problem.casefold() == "binary":
+    if is_binary:
         tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
-    elif problem.casefold() == "multiclass":
+    else:
         if positive_class:
             if isinstance(positive_class, str) or isinstance(positive_class, int):
                 new_y_true = np.where(y_true == positive_class, 1, 0)
@@ -486,8 +482,6 @@ def negative_predictive_score(
                 raise Exception("Cannot discern positive class for multiclass problem")
         else:
             raise Exception("Cannot calculate negative predictive score with None")
-    else:
-        raise ValueError("Cannot determine problem type")
     return tn / (tn + fn)
 
 
@@ -516,7 +510,7 @@ def average_negative_predictive_score(
         unique_classes = np.unique(y_true)
         for pos_class in unique_classes:
             overall_score += negative_predictive_score(
-                y_true, y_pred, problem="multiclass", positive_class=pos_class
+                y_true, y_pred, is_binary=False, positive_class=pos_class
             )
         return overall_score / len(unique_classes)
 
@@ -524,7 +518,7 @@ def average_negative_predictive_score(
 def false_negative_score(
     y_true: Union[Sequence[int], np.ndarray, pd.Series],
     y_pred: Union[Sequence[int], np.ndarray, pd.Series],
-    problem: str = "Binary",
+    is_binary: bool = True,
     positive_class: Union[str, int] = None,
 ) -> float:
     """The inverse of our false positive score, calculates the number of false negatives compared to the number of
@@ -536,7 +530,7 @@ def false_negative_score(
         The true, or the expected, values of our problem
     y_pred: list or array like
         The predicted values of our problem
-    problem: str, ['binary', 'multiclass'], default='binary'
+    is_binary: bool, default = True
         Whether our problem is a binary classification or a multiclassification problem
     positive_class: int or str, default=None
         If problem=='multiclass' then the class we are denoting as 'succcess' or 'positive' (i.e., the one marked as a 1).
@@ -546,9 +540,9 @@ def false_negative_score(
     The false positive score
     """
     problem_true, y_true, y_pred = _check_targets(y_true, y_pred)
-    if problem.casefold() == "binary":
+    if is_binary:
         tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
-    elif problem.casefold() == "multiclass":
+    else:
         if positive_class:
             if isinstance(positive_class, str) or isinstance(positive_class, int):
                 new_y_true = np.where(y_true == positive_class, 1, 0)
@@ -558,8 +552,6 @@ def false_negative_score(
                 raise Exception("Cannot discern positive class for multiclass problem")
         else:
             raise Exception("Cannot calculate false negative score with None")
-    else:
-        raise ValueError("Cannot determine problem type")
     return fn / (fn + tp)
 
 
@@ -588,7 +580,7 @@ def average_false_negative_score(
         unique_classes = np.unique(y_true)
         for pos_class in unique_classes:
             overall_score += false_negative_score(
-                y_true, y_pred, problem="multiclass", positive_class=pos_class
+                y_true, y_pred, is_binary=False, positive_class=pos_class
             )
         return overall_score / len(unique_classes)
 
@@ -596,7 +588,7 @@ def average_false_negative_score(
 def problem_two_error_score(
     y_true: Union[Sequence[int], np.ndarray, pd.Series],
     y_pred: Union[Sequence[int], np.ndarray, pd.Series],
-    problem: str = "Binary",
+    is_binary: bool = True,
     positive_class: Union[str, int] = None,
 ) -> float:
     """This is exactly the same as false negative score
@@ -604,10 +596,10 @@ def problem_two_error_score(
     Parameters
     ----------
     y_true: list or array like
-        The true, or the expected, values of our problem
+        The true, or the expected, values of our model
     y_pred: list or array like
-        The predicted values of our problem
-    problem: str, ['binary', 'multiclass'], default='binary'
+        The predicted values of our model
+    is_binary: bool, default = True
         Whether our problem is a binary classification or a multiclassification problem
     positive_class: int or str, default=None
         If problem=='multiclass' then the class we are denoting as 'succcess' or 'positive' (i.e., the one marked as a 1).
@@ -617,7 +609,7 @@ def problem_two_error_score(
     The problem II error score
     """
     return false_negative_score(
-        y_true, y_pred, problem=problem, positive_class=positive_class
+        y_true, y_pred, is_binary=is_binary, positive_class=positive_class
     )
 
 
@@ -644,28 +636,30 @@ def average_problem_two_error_score(
 def false_positive_score(
     y_true: Union[Sequence[int], np.ndarray, pd.Series],
     y_pred: Union[Sequence[int], np.ndarray, pd.Series],
-    problem: str = "Binary",
+    is_binary: bool = True,
     positive_class: Union[str, int] = None,
 ) -> float:
     """Calculates the ratio of false positives to false positives and true negatives.
+
     Parameters
     ----------
     y_true: list or array like
-        The true, or the expected, values of our problem
+        The true, or the expected, values of our model
     y_pred: list or array like
-        The predicted values of our problem
-    problem: str, ['binary', 'multiclass'], default='binary'
+        The predicted values of our model
+    is_binary: bool, default = True
         Whether our problem is a binary classification or a multiclassification problem
     positive_class: int or str, default=None
         If problem=='multiclass' then the class we are denoting as 'succcess' or 'positive' (i.e., the one marked as a 1).
+
     Returns
     -------
     The false positive score
     """
     problem_true, y_true, y_pred = _check_targets(y_true, y_pred)
-    if problem.casefold() == "binary":
+    if is_binary:
         tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
-    elif problem.casefold() == "multiclass":
+    else:
         if positive_class:
             if isinstance(positive_class, str) or isinstance(positive_class, int):
                 new_y_true = np.where(y_true == positive_class, 1, 0)
@@ -675,8 +669,6 @@ def false_positive_score(
                 raise Exception("Cannot discern positive class for multiclass problem")
         else:
             raise Exception("Cannot calculate false positive score with None")
-    else:
-        raise ValueError("Cannot determine problem type")
     return fp / (fp + tn)
 
 
@@ -705,7 +697,7 @@ def average_false_positive_score(
         unique_classes = np.unique(y_true)
         for pos_class in unique_classes:
             overall_score += false_positive_score(
-                y_true, y_pred, problem="multiclass", positive_class=pos_class
+                y_true, y_pred, is_binary=False, positive_class=pos_class
             )
         return overall_score / len(unique_classes)
 
@@ -713,26 +705,28 @@ def average_false_positive_score(
 def problem_one_error_score(
     y_true: Union[Sequence[int], np.ndarray, pd.Series],
     y_pred: Union[Sequence[int], np.ndarray, pd.Series],
-    problem: str = "Binary",
+    is_binary: bool = True,
     positive_class: Union[str, int] = None,
 ) -> float:
     """This is exactly the same as false positive score
+
     Parameters
     ----------
     y_true: list or array like
-        The true, or the expected, values of our problem
+        The true, or the expected, values of our model
     y_pred: list or array like
-        The predicted values of our problem
-    problem: str, ['binary', 'multiclass'], default='binary'
+        The predicted values of our model
+    is_binary: default = True
         Whether our problem is a binary classification or a multiclassification problem
     positive_class: int or str, default=None
         If problem=='multiclass' then the class we are denoting as 'succcess' or 'positive' (i.e., the one marked as a 1).
+
     Returns
     -------
     The problem I error score
     """
     return false_positive_score(
-        y_true, y_pred, problem=problem, positive_class=positive_class
+        y_true, y_pred, is_binary=is_binary, positive_class=positive_class
     )
 
 
@@ -759,28 +753,30 @@ def average_problem_one_error_score(
 def false_discovery_score(
     y_true: Union[Sequence[int], np.ndarray, pd.Series],
     y_pred: Union[Sequence[int], np.ndarray, pd.Series],
-    problem: str = "Binary",
+    is_binary: bool = True,
     positive_class: Union[str, int] = None,
 ) -> float:
     """Calculates the ratio of false positives to false positives and true positives
+
     Parameters
     ----------
     y_true: list or array like
-        The true, or the expected, values of our problem
+        The true, or the expected, values of our model
     y_pred: list or array like
-        The predicted values of our problem
-    problem: str, ['binary', 'multiclass'], default='binary'
+        The predicted values of our model
+    is_binary: bool, default = True
         Whether our problem is a binary classification or a multiclassification problem
     positive_class: int or str, default=None
         If problem=='multiclass' then the class we are denoting as 'succcess' or 'positive' (i.e., the one marked as a 1).
+
     Returns
     -------
     The false discovery score
     """
     problem_true, y_true, y_pred = _check_targets(y_true, y_pred)
-    if problem.casefold() == "binary":
+    if is_binary:
         tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
-    elif problem.casefold() == "multiclass":
+    else:
         if positive_class:
             if isinstance(positive_class, str) or isinstance(positive_class, int):
                 new_y_true = np.where(y_true == positive_class, 1, 0)
@@ -790,8 +786,6 @@ def false_discovery_score(
                 raise Exception("Cannot discern positive class for multiclass problem")
         else:
             raise Exception("Cannot calculate false discovery score with None")
-    else:
-        raise ValueError("Cannot determine problem type")
     return fp / (fp + tp)
 
 
@@ -820,7 +814,7 @@ def average_false_discovery_score(
         unique_classes = np.unique(y_true)
         for pos_class in unique_classes:
             overall_score += false_discovery_score(
-                y_true, y_pred, problem="multiclass", positive_class=pos_class
+                y_true, y_pred, is_binary=False, positive_class=pos_class
             )
         return overall_score / len(unique_classes)
 
@@ -828,28 +822,30 @@ def average_false_discovery_score(
 def false_omission_rate(
     y_true: Union[Sequence[int], np.ndarray, pd.Series],
     y_pred: Union[Sequence[int], np.ndarray, pd.Series],
-    problem: str = "Binary",
+    is_binary: bool = True,
     positive_class: Union[str, int] = None,
 ) -> float:
     """Calculates the ratio of false negatives to false negatives and true negatives
+
     Parameters
     ----------
     y_true: list or array like
-        The true, or the expected, values of our problem
+        The true, or the expected, values of our model
     y_pred: list or array like
-        The predicted values of our problem
-    problem: str, ['binary', 'multiclass'], default='binary'
+        The predicted values of our model
+    is_binary: bool, default = True
         Whether our problem is a binary classification or a multiclassification problem
     positive_class: int or str, default=None
         If problem=='multiclass' then the class we are denoting as 'succcess' or 'positive' (i.e., the one marked as a 1).
+
     Returns
     -------
     The false omission rate
     """
     problem_true, y_true, y_pred = _check_targets(y_true, y_pred)
-    if problem.casefold() == "binary":
+    if is_binary:
         tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
-    elif problem.casefold() == "multiclass":
+    else:
         if positive_class:
             if isinstance(positive_class, str) or isinstance(positive_class, int):
                 new_y_true = np.where(y_true == positive_class, 1, 0)
@@ -859,8 +855,6 @@ def false_omission_rate(
                 raise Exception("Cannot discern positive class for multiclass problem")
         else:
             raise Exception("Cannot calculate false omission score with None")
-    else:
-        raise ValueError("Cannot determine problem type")
     return fn / (fn + tn)
 
 
@@ -889,7 +883,7 @@ def average_false_omission_rate(
         unique_classes = np.unique(y_true)
         for pos_class in unique_classes:
             overall_score += false_omission_rate(
-                y_true, y_pred, problem="multiclass", positive_class=pos_class
+                y_true, y_pred, is_binary=False, positive_class=pos_class
             )
         return overall_score / len(unique_classes)
 
@@ -897,7 +891,7 @@ def average_false_omission_rate(
 def j_score(
     y_true: Union[Sequence[int], np.ndarray, pd.Series],
     y_pred: Union[Sequence[int], np.ndarray, pd.Series],
-    problem: str = "Binary",
+    is_binary: bool = True,
     positive_class: Union[str, int] = None,
 ) -> float:
     """Calculate the j-score, or our sensitivity + specificity - 1
@@ -905,10 +899,10 @@ def j_score(
     Parameters
     ----------
     y_true: list or array like
-        The true, or the expected, values of our problem
+        The true, or the expected, values of our model
     y_pred: list or array like
-        The predicted values of our problem
-    problem: str, ['binary', 'multiclass'], default='binary'
+        The predicted values of our model
+    is_binary: bool, default = True
         Whether our problem is a binary classification or a multiclassification problem
     positive_class: int or str, default=None
         If problem=='multiclass' then the class we are denoting as 'succcess' or 'positive' (i.e., the one marked as a 1).
@@ -919,10 +913,10 @@ def j_score(
     """
     return (
         sensitivity_score(
-            y_true, y_pred, problem=problem, positive_class=positive_class
+            y_true, y_pred, is_binary=is_binary, positive_class=positive_class
         )
         + specificity_score(
-            y_true, y_pred, problem=problem, positive_class=positive_class
+            y_true, y_pred, is_binary=is_binary, positive_class=positive_class
         )
         - 1
     )
@@ -931,7 +925,7 @@ def j_score(
 def markedness_score(
     y_true: Union[Sequence[int], np.ndarray, pd.Series],
     y_pred: Union[Sequence[int], np.ndarray, pd.Series],
-    problem: str = "Binary",
+    is_binary=True,
     positive_class: Union[str, int] = None,
 ) -> float:
     """Calculates the markedness score, or the precision + negative predictive score - 1
@@ -939,10 +933,10 @@ def markedness_score(
     Parameters
     ----------
     y_true: list or array like
-        The true, or the expected, values of our problem
+        The true, or the expected, values of our model
     y_pred: list or array like
-        The predicted values of our problem
-    problem: str, ['binary', 'multiclass'], default='binary'
+        The predicted values of our model
+    is_binary: bool, default = True
         Whether our problem is a binary classification or a multiclassification problem
     positive_class: int or str, default=None
         If problem=='multiclass' then the class we are denoting as 'succcess' or 'positive' (i.e., the one marked as a 1).
@@ -955,13 +949,13 @@ def markedness_score(
     def precision_score(
         y_true: Union[Sequence[int], np.ndarray, pd.Series],
         y_pred: Union[Sequence[int], np.ndarray, pd.Series],
-        problem: str = "Binary",
+        is_binary: bool = True,
         positive_class: Union[str, int] = None,
     ) -> float:
         problem_true, y_true, y_pred = _check_targets(y_true, y_pred)
-        if problem.casefold() == "binary":
+        if is_binary:
             tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
-        elif problem.casefold() == "multiclass":
+        else:
             if positive_class:
                 if isinstance(positive_class, str) or isinstance(positive_class, int):
                     new_y_true = np.where(y_true == positive_class, 1, 0)
@@ -973,13 +967,15 @@ def markedness_score(
                     )
             else:
                 raise Exception("Cannot calculate precision score with None")
-        else:
-            raise ValueError("Cannot determine problem type")
         return tp / (tp + fp)
 
     return (
-        precision_score(y_true, y_pred, problem=problem, positive_class=positive_class)
-        + negative_predictive_score(y_true, y_pred, problem=problem, positive_class=positive_class)
+        precision_score(
+            y_true, y_pred, is_binary=is_binary, positive_class=positive_class
+        )
+        + negative_predictive_score(
+            y_true, y_pred, is_binary=is_binary, positive_class=positive_class
+        )
         - 1
     )
 
@@ -987,18 +983,18 @@ def markedness_score(
 def likelihood_ratio_positive(
     y_true: Union[Sequence[int], np.ndarray, pd.Series],
     y_pred: Union[Sequence[int], np.ndarray, pd.Series],
-    problem: str = "Binary",
+    is_binary: bool = True,
     positive_class: Union[str, int] = None,
 ) -> float:
-    """Calculates the likehood ratio positive, or sensitivity / (1 - specificity)
+    """Calculates the likelihood ratio positive, or sensitivity / (1 - specificity)
 
     Parameters
     ----------
     y_true: list or array like
-        The true, or the expected, values of our problem
+        The true, or the expected, values of our model
     y_pred: list or array like
-        The predicted values of our problem
-    problem: str, ['binary', 'multiclass'], default='binary'
+        The predicted values of our model
+    is_binary: bool, default = True
         Whether our problem is a binary classification or a multiclassification problem
     positive_class: int or str, default=None
         If problem=='multiclass' then the class we are denoting as 'succcess' or 'positive' (i.e., the one marked as a 1).
@@ -1008,11 +1004,11 @@ def likelihood_ratio_positive(
     The positive likelihood ratio
     """
     return sensitivity_score(
-        y_true, y_pred, problem=problem, positive_class=positive_class
+        y_true, y_pred, is_binary=is_binary, positive_class=positive_class
     ) / (
         1
         - specificity_score(
-            y_true, y_pred, problem=problem, positive_class=positive_class
+            y_true, y_pred, is_binary=is_binary, positive_class=positive_class
         )
     )
 
@@ -1020,7 +1016,7 @@ def likelihood_ratio_positive(
 def likelihood_ratio_negative(
     y_true: Union[Sequence[int], np.ndarray, pd.Series],
     y_pred: Union[Sequence[int], np.ndarray, pd.Series],
-    problem: str = "Binary",
+    is_binary: bool = True,
     positive_class: Union[str, int] = None,
 ) -> float:
     """Calculates the likelihood ratio negative, or specificity / (1 - sensitivity)
@@ -1028,10 +1024,10 @@ def likelihood_ratio_negative(
     Parameters
     ----------
     y_true: list or array like
-        The true, or the expected, values of our problem
+        The true, or the expected, values of our model
     y_pred: list or array like
-        The predicted values of our problem
-    problem: str, ['binary', 'multiclass'], default='binary'
+        The predicted values of our model
+    is_binary: bool, default=True
         Whether our problem is a binary classification or a multiclassification problem
     positive_class: int or str, default=None
         If problem=='multiclass' then the class we are denoting as 'succcess' or 'positive' (i.e., the one marked as a 1).
@@ -1041,10 +1037,10 @@ def likelihood_ratio_negative(
     The negative likelihood ratio
     """
     return specificity_score(
-        y_true, y_pred, problem=problem, positive_class=positive_class
+        y_true, y_pred, is_binary=is_binary, positive_class=positive_class
     ) / (
         1
         - sensitivity_score(
-            y_true, y_pred, problem=problem, positive_class=positive_class
+            y_true, y_pred, is_binary=is_binary, positive_class=positive_class
         )
     )

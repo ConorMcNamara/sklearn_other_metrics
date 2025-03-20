@@ -188,62 +188,62 @@ class TestGetClassificationLabels:
 
 class TestSpecificityScore:
     @pytest.mark.parametrize(
-        "y_true, y_pred, problem, positive_class",
+        "y_true, y_pred, is_binary, positive_class",
         [
-            ([0, 0, 1, 1, 2, 2], [0, 1, 2, 0, 1, 2], "multiclass", None),
-            ([0, 0, 1, 1, 2, 2], [0, 1, 2, 0, 1, 2], "multiclass", [1, 2]),
+            ([0, 0, 1, 1, 2, 2], [0, 1, 2, 0, 1, 2], False, None),
+            ([0, 0, 1, 1, 2, 2], [0, 1, 2, 0, 1, 2], False, [1, 2]),
         ],
     )
     def test_specificityScore_Exception(
         self,
         y_true: Sequence[int],
         y_pred: Sequence[int],
-        problem: str,
+        is_binary: bool,
         positive_class: Optional[Sequence],
     ) -> None:
         with pytest.raises(Exception):
-            other_metrics.specificity_score(y_true, y_pred, problem, positive_class)
+            other_metrics.specificity_score(y_true, y_pred, is_binary, positive_class)
 
     @pytest.mark.parametrize(
-        "y_true, y_pred, problem, positive_class",
+        "y_true, y_pred, is_binary, positive_class",
         [
-            ([1, 0, 1, 0], [1, 0, 0, 1], "binary", None),
-            ([1, 1, 2, 2, 3, 3], [1, 2, 3, 3, 2, 1], "multiclass", 3),
+            ([1, 0, 1, 0], [1, 0, 0, 1], True, None),
+            ([1, 1, 2, 2, 3, 3], [1, 2, 3, 3, 2, 1], False, 3),
         ],
     )
     def test_specificityScore_result(
         self,
         y_true: Sequence[int],
         y_pred: Sequence[int],
-        problem: str,
+        is_binary: bool,
         positive_class: Optional[int],
     ) -> None:
         assert (
-            other_metrics.specificity_score(y_true, y_pred, problem, positive_class)
+            other_metrics.specificity_score(y_true, y_pred, is_binary, positive_class)
             == 0.5
         )
 
 
 class TestSensitivityScore:
     @pytest.mark.parametrize(
-        "y_true, y_pred, problem, positive_class",
+        "y_true, y_pred, is_binary, positive_class",
         [
-            ([0, 0, 1, 1, 2, 2], [0, 1, 2, 0, 1, 2], "multiclass", None),
-            ([0, 0, 1, 1, 2, 2], [0, 1, 2, 0, 1, 2], "multiclass", [1, 2]),
+            ([0, 0, 1, 1, 2, 2], [0, 1, 2, 0, 1, 2], False, None),
+            ([0, 0, 1, 1, 2, 2], [0, 1, 2, 0, 1, 2], False, [1, 2]),
         ],
     )
     def test_sensitivityScore_Exception(
         self,
         y_true: Sequence[int],
         y_pred: Sequence[int],
-        problem: str,
+        is_binary: bool,
         positive_class: Optional[Sequence],
     ) -> None:
         with pytest.raises(Exception):
-            other_metrics.sensitivity_score(y_true, y_pred, problem, positive_class)
+            other_metrics.sensitivity_score(y_true, y_pred, is_binary, positive_class)
 
     @pytest.mark.parametrize(
-        "y_true, y_pred, problem, positive_class, result",
+        "y_true, y_pred, is_binary, positive_class, result",
         [
             ([1, 0, 1, 0], [1, 0, 0, 1], "binary", None, 0.5),
             ([1, 1, 2, 2, 3, 3], [1, 2, 3, 3, 2, 1], "multiclass", 3, 0.0),
@@ -253,53 +253,53 @@ class TestSensitivityScore:
         self,
         y_true: Sequence[int],
         y_pred: Sequence[int],
-        problem: str,
+        is_binary: bool,
         positive_class: Optional[int],
         result: float,
     ) -> None:
         assert (
-            other_metrics.sensitivity_score(y_true, y_pred, problem, positive_class)
+            other_metrics.sensitivity_score(y_true, y_pred, is_binary, positive_class)
             == result
         )
 
 
 class TestNegativePredictiveScore:
     @pytest.mark.parametrize(
-        "y_true, y_pred, problem, positive_class",
+        "y_true, y_pred, is_binary, positive_class",
         [
-            ([0, 0, 1, 1, 2, 2], [0, 1, 2, 0, 1, 2], "multiclass", None),
-            ([0, 0, 1, 1, 2, 2], [0, 1, 2, 0, 1, 2], "multiclass", [1, 2]),
+            ([0, 0, 1, 1, 2, 2], [0, 1, 2, 0, 1, 2], False, None),
+            ([0, 0, 1, 1, 2, 2], [0, 1, 2, 0, 1, 2], False, [1, 2]),
         ],
     )
     def test_negativePredictiveScore_Exception(
         self,
         y_true: Sequence[int],
         y_pred: Sequence[int],
-        problem: str,
+        is_binary: bool,
         positive_class: Optional[Sequence],
     ) -> None:
         with pytest.raises(Exception):
             other_metrics.negative_predictive_score(
-                y_true, y_pred, problem, positive_class
+                y_true, y_pred, is_binary, positive_class
             )
 
     @pytest.mark.parametrize(
-        "y_true, y_pred, problem, positive_class",
+        "y_true, y_pred, is_binary, positive_class",
         [
-            ([1, 0, 1, 0], [1, 0, 0, 1], "binary", None),
-            ([1, 1, 2, 2, 3, 3], [1, 2, 3, 3, 2, 1], "multiclass", 3),
+            ([1, 0, 1, 0], [1, 0, 0, 1], True, None),
+            ([1, 1, 2, 2, 3, 3], [1, 2, 3, 3, 2, 1], False, 3),
         ],
     )
     def test_negativePredictiveScore_result(
         self,
         y_true: Sequence[int],
         y_pred: Sequence[int],
-        problem: str,
+        is_binary: bool,
         positive_class: Optional[int],
     ) -> None:
         assert (
             other_metrics.negative_predictive_score(
-                y_true, y_pred, problem, positive_class
+                y_true, y_pred, is_binary, positive_class
             )
             == 0.5
         )
@@ -307,219 +307,233 @@ class TestNegativePredictiveScore:
 
 class TestFalseNegativeScore:
     @pytest.mark.parametrize(
-        "y_true, y_pred, problem, positive_class",
+        "y_true, y_pred, is_binary, positive_class",
         [
-            ([0, 0, 1, 1, 2, 2], [0, 1, 2, 0, 1, 2], "multiclass", None),
-            ([0, 0, 1, 1, 2, 2], [0, 1, 2, 0, 1, 2], "multiclass", [1, 2]),
+            ([0, 0, 1, 1, 2, 2], [0, 1, 2, 0, 1, 2], False, None),
+            ([0, 0, 1, 1, 2, 2], [0, 1, 2, 0, 1, 2], False, [1, 2]),
         ],
     )
     def test_falseNegativeScore_Exception(
         self,
         y_true: Sequence[int],
         y_pred: Sequence[int],
-        problem: str,
+        is_binary: bool,
         positive_class: Optional[Sequence],
     ) -> None:
         with pytest.raises(Exception):
-            other_metrics.false_negative_score(y_true, y_pred, problem, positive_class)
+            other_metrics.false_negative_score(
+                y_true, y_pred, is_binary, positive_class
+            )
 
     @pytest.mark.parametrize(
-        "y_true, y_pred, problem, positive_class, result",
+        "y_true, y_pred, is_binary, positive_class, result",
         [
-            ([1, 0, 1, 0], [1, 0, 0, 1], "binary", None, 0.5),
-            ([1, 1, 2, 2, 3, 3], [1, 2, 3, 3, 2, 1], "multiclass", 2, 1),
+            ([1, 0, 1, 0], [1, 0, 0, 1], True, None, 0.5),
+            ([1, 1, 2, 2, 3, 3], [1, 2, 3, 3, 2, 1], False, 2, 1),
         ],
     )
     def test_falseNegativeScore_result(
         self,
         y_true: Sequence[int],
         y_pred: Sequence[int],
-        problem: str,
+        is_binary: bool,
         positive_class: Optional[int],
         result: float,
     ) -> None:
         assert (
-            other_metrics.false_negative_score(y_true, y_pred, problem, positive_class)
+            other_metrics.false_negative_score(
+                y_true, y_pred, is_binary, positive_class
+            )
             == result
         )
 
 
 class TestFalsePositiveScore:
     @pytest.mark.parametrize(
-        "y_true, y_pred, problem, positive_class",
+        "y_true, y_pred, is_binary, positive_class",
         [
-            ([0, 0, 1, 1, 2, 2], [0, 1, 2, 0, 1, 2], "multiclass", None),
-            ([0, 0, 1, 1, 2, 2], [0, 1, 2, 0, 1, 2], "multiclass", [1, 2]),
+            ([0, 0, 1, 1, 2, 2], [0, 1, 2, 0, 1, 2], False, None),
+            ([0, 0, 1, 1, 2, 2], [0, 1, 2, 0, 1, 2], False, [1, 2]),
         ],
     )
     def test_falsePositiveScore_Exception(
         self,
         y_true: Sequence[int],
         y_pred: Sequence[int],
-        problem: str,
+        is_binary: bool,
         positive_class: Optional[Sequence],
     ) -> None:
         with pytest.raises(Exception):
-            other_metrics.false_positive_score(y_true, y_pred, problem, positive_class)
+            other_metrics.false_positive_score(
+                y_true, y_pred, is_binary, positive_class
+            )
 
     @pytest.mark.parametrize(
-        "y_true, y_pred, problem, positive_class, result",
+        "y_true, y_pred, is_binary, positive_class, result",
         [
-            ([1, 0, 1, 0], [1, 0, 0, 1], "binary", None, 0.5),
-            ([1, 1, 2, 2, 3, 3], [1, 2, 3, 3, 2, 1], "multiclass", 1, 0.25),
+            ([1, 0, 1, 0], [1, 0, 0, 1], True, None, 0.5),
+            ([1, 1, 2, 2, 3, 3], [1, 2, 3, 3, 2, 1], False, 1, 0.25),
         ],
     )
     def test_falsePositiveScore_result(
         self,
         y_true: Sequence[int],
         y_pred: Sequence[int],
-        problem: str,
+        is_binary: bool,
         positive_class: Optional[int],
         result: float,
     ) -> None:
         assert (
-            other_metrics.false_positive_score(y_true, y_pred, problem, positive_class)
+            other_metrics.false_positive_score(
+                y_true, y_pred, is_binary, positive_class
+            )
             == result
         )
 
 
 class TestFalseDiscoveryScore:
     @pytest.mark.parametrize(
-        "y_true, y_pred, problem, positive_class",
+        "y_true, y_pred, is_binary, positive_class",
         [
-            ([0, 0, 1, 1, 2, 2], [0, 1, 2, 0, 1, 2], "multiclass", None),
-            ([0, 0, 1, 1, 2, 2], [0, 1, 2, 0, 1, 2], "multiclass", [1, 2]),
+            ([0, 0, 1, 1, 2, 2], [0, 1, 2, 0, 1, 2], False, None),
+            ([0, 0, 1, 1, 2, 2], [0, 1, 2, 0, 1, 2], False, [1, 2]),
         ],
     )
     def test_falseDiscoveryScore_Exception(
         self,
         y_true: Sequence[int],
         y_pred: Sequence[int],
-        problem: str,
+        is_binary: bool,
         positive_class: Optional[Sequence],
     ) -> None:
         with pytest.raises(Exception):
-            other_metrics.false_discovery_score(y_true, y_pred, problem, positive_class)
+            other_metrics.false_discovery_score(
+                y_true, y_pred, is_binary, positive_class
+            )
 
     @pytest.mark.parametrize(
-        "y_true, y_pred, problem, positive_class, result",
+        "y_true, y_pred, is_binary, positive_class, result",
         [
-            ([1, 0, 1, 0], [1, 0, 0, 1], "binary", None, 0.5),
-            ([1, 1, 2, 2, 3, 3], [1, 2, 3, 3, 2, 1], "multiclass", 3, 1.0),
+            ([1, 0, 1, 0], [1, 0, 0, 1], True, None, 0.5),
+            ([1, 1, 2, 2, 3, 3], [1, 2, 3, 3, 2, 1], False, 3, 1.0),
         ],
     )
     def test_falseDiscoveryScore_result(
         self,
         y_true: Sequence[int],
         y_pred: Sequence[int],
-        problem: str,
+        is_binary: bool,
         positive_class: Optional[int],
         result: float,
     ) -> None:
         assert (
-            other_metrics.false_discovery_score(y_true, y_pred, problem, positive_class)
+            other_metrics.false_discovery_score(
+                y_true, y_pred, is_binary, positive_class
+            )
             == result
         )
 
 
 class TestFalseOmissionRate:
     @pytest.mark.parametrize(
-        "y_true, y_pred, problem, positive_class",
+        "y_true, y_pred, is_binary, positive_class",
         [
-            ([0, 0, 1, 1, 2, 2], [0, 1, 2, 0, 1, 2], "multiclass", None),
-            ([0, 0, 1, 1, 2, 2], [0, 1, 2, 0, 1, 2], "multiclass", [1, 2]),
+            ([0, 0, 1, 1, 2, 2], [0, 1, 2, 0, 1, 2], False, None),
+            ([0, 0, 1, 1, 2, 2], [0, 1, 2, 0, 1, 2], False, [1, 2]),
         ],
     )
     def test_falseOmissionRate_Exception(
         self,
         y_true: Sequence[int],
         y_pred: Sequence[int],
-        problem: str,
+        is_binary: bool,
         positive_class: Optional[Sequence],
     ) -> None:
         with pytest.raises(Exception):
-            other_metrics.false_omission_rate(y_true, y_pred, problem, positive_class)
+            other_metrics.false_omission_rate(y_true, y_pred, is_binary, positive_class)
 
     @pytest.mark.parametrize(
-        "y_true, y_pred, problem, positive_class",
+        "y_true, y_pred, is_binary, positive_class",
         [
-            ([1, 0, 1, 0], [1, 0, 0, 1], "binary", None),
-            ([1, 1, 2, 2, 3, 3], [1, 2, 3, 3, 2, 1], "multiclass", 2),
+            ([1, 0, 1, 0], [1, 0, 0, 1], True, None),
+            ([1, 1, 2, 2, 3, 3], [1, 2, 3, 3, 2, 1], False, 2),
         ],
     )
     def test_falseOmissionRate_result(
         self,
         y_true: Sequence[int],
         y_pred: Sequence[int],
-        problem: str,
+        is_binary: bool,
         positive_class: Optional[int],
     ) -> None:
         assert (
-            other_metrics.false_omission_rate(y_true, y_pred, problem, positive_class)
+            other_metrics.false_omission_rate(y_true, y_pred, is_binary, positive_class)
             == 0.5
         )
 
 
 class TestJScore:
     @pytest.mark.parametrize(
-        "y_true, y_pred, problem, positive_class, result",
+        "y_true, y_pred, is_binary, positive_class, result",
         [
-            ([1, 0, 1, 0], [1, 0, 0, 1], "binary", None, 0.0),
-            ([1, 1, 2, 2, 3, 3], [1, 2, 3, 3, 2, 1], "multiclass", 2, -0.5),
+            ([1, 0, 1, 0], [1, 0, 0, 1], True, None, 0.0),
+            ([1, 1, 2, 2, 3, 3], [1, 2, 3, 3, 2, 1], False, 2, -0.5),
         ],
     )
     def test_jScore_result(
         self,
         y_true: Sequence[int],
         y_pred: Sequence[int],
-        problem: str,
+        is_binary: bool,
         positive_class: Optional[int],
         result: float,
     ) -> None:
-        assert other_metrics.j_score(y_true, y_pred, problem, positive_class) == result
+        assert (
+            other_metrics.j_score(y_true, y_pred, is_binary, positive_class) == result
+        )
 
 
 class TestMarkednessScore:
     @pytest.mark.parametrize(
-        "y_true, y_pred, problem, positive_class, result",
+        "y_true, y_pred, is_binary, positive_class, result",
         [
-            ([1, 0, 1, 0], [1, 0, 0, 1], "binary", None, 0.0),
-            ([1, 1, 2, 2, 3, 3], [1, 2, 3, 3, 2, 1], "multiclass", 2, -0.5),
+            ([1, 0, 1, 0], [1, 0, 0, 1], True, None, 0.0),
+            ([1, 1, 2, 2, 3, 3], [1, 2, 3, 3, 2, 1], False, 2, -0.5),
         ],
     )
     def test_markednessScore_result(
         self,
         y_true: Sequence[int],
         y_pred: Sequence[int],
-        problem: str,
+        is_binary: bool,
         positive_class: Optional[int],
         result: float,
     ) -> None:
         assert (
-            other_metrics.markedness_score(y_true, y_pred, problem, positive_class)
+            other_metrics.markedness_score(y_true, y_pred, is_binary, positive_class)
             == result
         )
 
 
 class TestLikelihoodRatioPositive:
     @pytest.mark.parametrize(
-        "y_true, y_pred, problem, positive_class, result",
+        "y_true, y_pred, is_binary, positive_class, result",
         [
-            ([1, 0, 1, 0], [1, 0, 0, 1], "binary", None, 1.0),
-            ([1, 1, 2, 2, 3, 3], [1, 2, 3, 3, 2, 1], "multiclass", 2, 0.0),
+            ([1, 0, 1, 0], [1, 0, 0, 1], True, None, 1.0),
+            ([1, 1, 2, 2, 3, 3], [1, 2, 3, 3, 2, 1], False, 2, 0.0),
         ],
     )
     def test_likelihoodRatioPositive_result(
         self,
         y_true: Sequence[int],
         y_pred: Sequence[int],
-        problem: str,
+        is_binary: bool,
         positive_class: Optional[int],
         result: float,
     ) -> None:
         assert (
             other_metrics.likelihood_ratio_positive(
-                y_true, y_pred, problem, positive_class
+                y_true, y_pred, is_binary, positive_class
             )
             == result
         )
@@ -527,23 +541,23 @@ class TestLikelihoodRatioPositive:
 
 class TestLikelihoodRatioNegative:
     @pytest.mark.parametrize(
-        "y_true, y_pred, problem, positive_class, result",
+        "y_true, y_pred, is_binary, positive_class, result",
         [
-            ([1, 0, 1, 0], [1, 0, 0, 1], "binary", None, 1.0),
-            ([1, 1, 2, 2, 3, 3], [1, 2, 3, 3, 2, 1], "multiclass", 3, 0.5),
+            ([1, 0, 1, 0], [1, 0, 0, 1], True, None, 1.0),
+            ([1, 1, 2, 2, 3, 3], [1, 2, 3, 3, 2, 1], False, 3, 0.5),
         ],
     )
     def test_likelihoodRatioNegative_result(
         self,
-        y_true: Sequence[int],
-        y_pred: Sequence[int],
-        problem: str,
+        y_true: list[int],
+        y_pred: list[int],
+        is_binary: bool,
         positive_class: Optional[int],
         result: float,
     ) -> None:
         assert (
             other_metrics.likelihood_ratio_negative(
-                y_true, y_pred, problem, positive_class
+                y_true, y_pred, is_binary, positive_class
             )
             == result
         )
