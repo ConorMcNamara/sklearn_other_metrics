@@ -23,13 +23,13 @@ def adjusted_r2_score(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our problem
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our problem
-    features_vector: list or array like, default=None
+    features_vector : list or array like, default=None
         A list of all features used for our model.
-    num_features: int, default=None
+    num_features : int, default=None
         The number of features used for our model. Used if features_vector is None
 
     Returns
@@ -73,13 +73,13 @@ def adjusted_explained_variance_score(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our problem
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our problem
-    features_vector: list or array like, default=None
+    features_vector : list or array like, default=None
         A list of all features used for our model.
-    num_features: int, default=None
+    num_features : int, default=None
         The number of features used for our model. Used if features_vector is None
 
     Returns
@@ -125,9 +125,9 @@ def mape_score(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our problem
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our problem
 
     Returns
@@ -151,9 +151,9 @@ def smape_score(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our problem
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our problem
 
     Returns
@@ -176,9 +176,9 @@ def root_mean_squared_error(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our problem
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our problem
 
     Returns
@@ -202,13 +202,13 @@ def group_mean_log_mae(
 
     Parameters
     ----------
-    y_true: list or array-like
+    y_true : list or array-like
         The true, or the expected, values of our problem; along with the group attached
-    y_pred: list or array-like
+    y_pred : list or array-like
         The predicted values of our problem; along with the group attached
-    groups: list or array like
+    groups : list or array like
         What our data is being grouped by.
-    floor: float, default=1e-9
+    floor : float, default=1e-9
         The minimum value our Group Mean Log MAE can be (as 0 is undefined for log transformations).
 
     Returns
@@ -236,9 +236,9 @@ def get_classification_labels(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our problem
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our problem
 
     Returns
@@ -269,13 +269,13 @@ def specificity_score(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our model
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our model
-    is_binary: bool, default=True
+    is_binary : bool, default=True
         Whether our problem is a binary classification or a multiclassification problem
-    positive_class: int or str, default=None
+    positive_class : int or str, default=None
         If problem=='multiclass' then the class we are denoting as 'succcess' or 'positive' (i.e., the one marked as a 1).
 
     Returns
@@ -307,9 +307,9 @@ def average_specificity_score(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our problem
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our problem
 
     Returns
@@ -338,13 +338,13 @@ def sensitivity_score(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our model
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our model
-    is_binary: bool, default=True
+    is_binary : bool, default=True
         Whether our problem is a binary classification or a multiclassification problem
-    positive_class: int or str, default=None
+    positive_class : int or str, default=None
         If problem=='multiclass' then the class we are denoting as 'succcess' or 'positive' (i.e., the one marked as a 1).
 
     Returns
@@ -376,9 +376,9 @@ def average_sensitivity_score(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our problem
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our problem
 
     Returns
@@ -407,13 +407,13 @@ def power_score(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our model
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our model
-    is_binary: bool, default = True
+    is_binary : bool, default = True
         Whether our problem is a binary classification or a multiclassification problem
-    positive_class: int or str, default=None
+    positive_class : int or str, default=None
         If problem=='multiclass' then the class we are denoting as 'succcess' or 'positive' (i.e., the one marked as a 1).
 
     Returns
@@ -433,9 +433,9 @@ def average_power_score(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our problem
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our problem
 
     Returns
@@ -456,13 +456,13 @@ def negative_predictive_score(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our model
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our model
-    is_binary: bool, default = True
+    is_binary : bool, default = True
         Whether our problem is a binary classification or a multiclassification problem
-    positive_class: int or str, default=None
+    positive_class : int or str, default=None
         If problem=='multiclass' then the class we are denoting as 'succcess' or 'positive' (i.e., the one marked as a 1).
 
     Returns
@@ -494,9 +494,9 @@ def average_negative_predictive_score(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our problem
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our problem
 
     Returns
@@ -526,13 +526,13 @@ def false_negative_score(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our problem
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our problem
-    is_binary: bool, default = True
+    is_binary : bool, default = True
         Whether our problem is a binary classification or a multiclassification problem
-    positive_class: int or str, default=None
+    positive_class : int or str, default=None
         If problem=='multiclass' then the class we are denoting as 'succcess' or 'positive' (i.e., the one marked as a 1).
 
     Returns
@@ -564,9 +564,9 @@ def average_false_negative_score(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our problem
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our problem
 
     Returns
@@ -595,13 +595,13 @@ def problem_two_error_score(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our model
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our model
-    is_binary: bool, default = True
+    is_binary : bool, default = True
         Whether our problem is a binary classification or a multiclassification problem
-    positive_class: int or str, default=None
+    positive_class : int or str, default=None
         If problem=='multiclass' then the class we are denoting as 'succcess' or 'positive' (i.e., the one marked as a 1).
 
     Returns
@@ -621,9 +621,9 @@ def average_problem_two_error_score(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our problem
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our problem
 
     Returns
@@ -643,13 +643,13 @@ def false_positive_score(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our model
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our model
-    is_binary: bool, default = True
+    is_binary : bool, default = True
         Whether our problem is a binary classification or a multiclassification problem
-    positive_class: int or str, default=None
+    positive_class : int or str, default=None
         If problem=='multiclass' then the class we are denoting as 'succcess' or 'positive' (i.e., the one marked as a 1).
 
     Returns
@@ -681,9 +681,9 @@ def average_false_positive_score(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our problem
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our problem
 
     Returns
@@ -712,13 +712,13 @@ def problem_one_error_score(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our model
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our model
-    is_binary: default = True
+    is_binary : default = True
         Whether our problem is a binary classification or a multiclassification problem
-    positive_class: int or str, default=None
+    positive_class : int or str, default=None
         If problem=='multiclass' then the class we are denoting as 'succcess' or 'positive' (i.e., the one marked as a 1).
 
     Returns
@@ -738,9 +738,9 @@ def average_problem_one_error_score(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our problem
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our problem
 
     Returns
@@ -760,13 +760,13 @@ def false_discovery_score(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our model
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our model
-    is_binary: bool, default = True
+    is_binary : bool, default = True
         Whether our problem is a binary classification or a multiclassification problem
-    positive_class: int or str, default=None
+    positive_class : int or str, default=None
         If problem=='multiclass' then the class we are denoting as 'succcess' or 'positive' (i.e., the one marked as a 1).
 
     Returns
@@ -798,9 +798,9 @@ def average_false_discovery_score(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our problem
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our problem
 
     Returns
@@ -829,13 +829,13 @@ def false_omission_rate(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our model
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our model
-    is_binary: bool, default = True
+    is_binary : bool, default = True
         Whether our problem is a binary classification or a multiclassification problem
-    positive_class: int or str, default=None
+    positive_class : int or str, default=None
         If problem=='multiclass' then the class we are denoting as 'succcess' or 'positive' (i.e., the one marked as a 1).
 
     Returns
@@ -867,9 +867,9 @@ def average_false_omission_rate(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our problem
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our problem
 
     Returns
@@ -898,13 +898,13 @@ def j_score(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our model
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our model
-    is_binary: bool, default = True
+    is_binary : bool, default = True
         Whether our problem is a binary classification or a multiclassification problem
-    positive_class: int or str, default=None
+    positive_class : int or str, default=None
         If problem=='multiclass' then the class we are denoting as 'succcess' or 'positive' (i.e., the one marked as a 1).
 
     Returns
@@ -932,13 +932,13 @@ def markedness_score(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our model
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our model
-    is_binary: bool, default = True
+    is_binary : bool, default = True
         Whether our problem is a binary classification or a multiclassification problem
-    positive_class: int or str, default=None
+    positive_class : int or str, default=None
         If problem=='multiclass' then the class we are denoting as 'succcess' or 'positive' (i.e., the one marked as a 1).
 
     Returns
@@ -990,13 +990,13 @@ def likelihood_ratio_positive(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our model
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our model
-    is_binary: bool, default = True
+    is_binary : bool, default = True
         Whether our problem is a binary classification or a multiclassification problem
-    positive_class: int or str, default=None
+    positive_class : int or str, default=None
         If problem=='multiclass' then the class we are denoting as 'succcess' or 'positive' (i.e., the one marked as a 1).
 
     Returns
@@ -1023,13 +1023,13 @@ def likelihood_ratio_negative(
 
     Parameters
     ----------
-    y_true: list or array like
+    y_true : list or array like
         The true, or the expected, values of our model
-    y_pred: list or array like
+    y_pred : list or array like
         The predicted values of our model
-    is_binary: bool, default=True
+    is_binary : bool, default=True
         Whether our problem is a binary classification or a multiclassification problem
-    positive_class: int or str, default=None
+    positive_class : int or str, default=None
         If problem=='multiclass' then the class we are denoting as 'succcess' or 'positive' (i.e., the one marked as a 1).
 
     Returns
