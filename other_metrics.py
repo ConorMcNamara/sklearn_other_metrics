@@ -19,7 +19,7 @@ def adjusted_r2_score(
     features_vector: Optional[Union[Sequence[str], np.ndarray, pd.Series]] = None,
     num_features: Optional[int] = None,
 ) -> float:
-    """Calculates an adjusted R-squared that penalizes models that use too many superfluous features
+    """Calculates an adjusted R-squared that penalizes models that use too many superfluous features.
 
     Parameters
     ----------
@@ -69,7 +69,7 @@ def adjusted_explained_variance_score(
     features_vector: Optional[Union[Sequence[str], np.ndarray, pd.Series]] = None,
     num_features: Optional[int] = None,
 ) -> float:
-    """Calculates an adjusted explained_variance_score that penalizes models that use too many superfluous features
+    """Calculates an adjusted explained_variance_score that penalizes models that use too many superfluous features.
 
     Parameters
     ----------
@@ -121,7 +121,7 @@ def mape_score(
     y_true: Union[Sequence[float], np.ndarray, pd.Series],
     y_pred: Union[Sequence[float], np.ndarray, pd.Series],
 ) -> float:
-    """Calculates the Mean Absolute Percentage Error, a common metric used for Time Series Problems
+    """Calculates the Mean Absolute Percentage Error, a common metric used for Time Series Problems.
 
     Parameters
     ----------
@@ -265,7 +265,7 @@ def specificity_score(
     is_binary: bool = True,
     positive_class: Union[str, int] = None,
 ) -> float:
-    """Calculates the specificity of a classification problem
+    """Calculates the specificity of a classification problem.
 
     Parameters
     ----------
@@ -303,7 +303,7 @@ def average_specificity_score(
     y_pred: Union[Sequence[int], np.ndarray, pd.Series],
 ) -> float:
     """Calculates the average specificty score. Used for when we have more than 2 classes and want our models' average
-    performance for each class
+    performance for each class.
 
     Parameters
     ----------
@@ -334,7 +334,7 @@ def sensitivity_score(
     is_binary: True,
     positive_class: Union[str, int] = None,
 ) -> float:
-    """This is exactly the same as recall
+    """This is exactly the same as recall.
 
     Parameters
     ----------
@@ -372,7 +372,7 @@ def average_sensitivity_score(
     y_pred: Union[Sequence[int], np.ndarray, pd.Series],
 ) -> float:
     """Calculates the average sensitivity score. Used for when we have more than 2 classes and want our models' average
-    performance for each class
+    performance for each class.
 
     Parameters
     ----------
@@ -403,7 +403,7 @@ def power_score(
     is_binary: bool = True,
     positive_class: Union[str, int] = None,
 ) -> float:
-    """This is just another way of saying sensitivity
+    """This is just another way of saying sensitivity.
 
     Parameters
     ----------
@@ -429,7 +429,7 @@ def average_power_score(
     y_true: Union[Sequence[int], np.ndarray, pd.Series],
     y_pred: Union[Sequence[int], np.ndarray, pd.Series],
 ) -> float:
-    """This is another way of saying average_sensitivity_score
+    """This is another way of saying average_sensitivity_score.
 
     Parameters
     ----------
@@ -451,8 +451,8 @@ def negative_predictive_score(
     is_binary: bool = True,
     positive_class: Union[str, int] = None,
 ) -> float:
-    """Also known as problem II error score. Calculates the percentage of true negatives we correctly identified compared to
-    the number of true negative and false negatives.
+    """Also known as problem II error score. Calculates the percentage of true negatives we correctly identified
+    compared to the number of true negative and false negatives.
 
     Parameters
     ----------
@@ -490,7 +490,7 @@ def average_negative_predictive_score(
     y_pred: Union[Sequence[int], np.ndarray, pd.Series],
 ) -> float:
     """Calculates the average negative predictive score. Used for when we have more than 2 classes and want our models'
-    average performance for each class
+    average performance for each class.
 
     Parameters
     ----------
@@ -521,8 +521,8 @@ def false_negative_score(
     is_binary: bool = True,
     positive_class: Union[str, int] = None,
 ) -> float:
-    """The inverse of our false positive score, calculates the number of false negatives compared to the number of
-    false negatives and true positives.
+    """The inverse of our false positive score, calculates the number of false negatives compared to the number of false
+    negatives and true positives.
 
     Parameters
     ----------
@@ -560,7 +560,7 @@ def average_false_negative_score(
     y_pred: Union[Sequence[int], np.ndarray, pd.Series],
 ) -> float:
     """Calculates the average false negative score. Used for when we have more than 2 classes and want our models'
-    average performance for each class
+    average performance for each class.
 
     Parameters
     ----------
@@ -591,7 +591,7 @@ def problem_two_error_score(
     is_binary: bool = True,
     positive_class: Union[str, int] = None,
 ) -> float:
-    """This is exactly the same as false negative score
+    """This is exactly the same as false negative score.
 
     Parameters
     ----------
@@ -617,7 +617,7 @@ def average_problem_two_error_score(
     y_true: Union[Sequence[int], np.ndarray, pd.Series],
     y_pred: Union[Sequence[int], np.ndarray, pd.Series],
 ) -> float:
-    """This is exactly the same as average false negative score
+    """This is exactly the same as average false negative score.
 
     Parameters
     ----------
@@ -677,7 +677,7 @@ def average_false_positive_score(
     y_pred: Union[Sequence[int], np.ndarray, pd.Series],
 ) -> float:
     """Calculates the average false positive score. Used for when we have more than 2 classes and want our models'
-    average performance for each class
+    average performance for each class.
 
     Parameters
     ----------
@@ -708,7 +708,7 @@ def problem_one_error_score(
     is_binary: bool = True,
     positive_class: Union[str, int] = None,
 ) -> float:
-    """This is exactly the same as false positive score
+    """This is exactly the same as false positive score.
 
     Parameters
     ----------
@@ -734,7 +734,7 @@ def average_problem_one_error_score(
     y_true: Union[Sequence[int], np.ndarray, pd.Series],
     y_pred: Union[Sequence[int], np.ndarray, pd.Series],
 ) -> float:
-    """This is exactly the same as average false positive score
+    """This is exactly the same as average false positive score.
 
     Parameters
     ----------
@@ -756,7 +756,7 @@ def false_discovery_score(
     is_binary: bool = True,
     positive_class: Union[str, int] = None,
 ) -> float:
-    """Calculates the ratio of false positives to false positives and true positives
+    """Calculates the ratio of false positives to false positives and true positives.
 
     Parameters
     ----------
@@ -794,7 +794,7 @@ def average_false_discovery_score(
     y_pred: Union[Sequence[int], np.ndarray, pd.Series],
 ) -> float:
     """Calculates the average false discovery score. Used for when we have more than 2 classes and want our models'
-    average performance for each class
+    average performance for each class.
 
     Parameters
     ----------
@@ -825,7 +825,7 @@ def false_omission_rate(
     is_binary: bool = True,
     positive_class: Union[str, int] = None,
 ) -> float:
-    """Calculates the ratio of false negatives to false negatives and true negatives
+    """Calculates the ratio of false negatives to false negatives and true negatives.
 
     Parameters
     ----------
@@ -863,7 +863,7 @@ def average_false_omission_rate(
     y_pred: Union[Sequence[int], np.ndarray, pd.Series],
 ) -> float:
     """Calculates the average false omission rate. Used for when we have more than 2 classes and want our models'
-    average performance for each class
+    average performance for each class.
 
     Parameters
     ----------
