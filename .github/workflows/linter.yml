@@ -3,10 +3,12 @@ name: Formatting and Docstring Generation
 on:
   push:
     branches:
-      - main  # Trigger on pushes to the 'main' branch
+      - master  # Trigger on pushes to the 'master' branch
+      - main 
   pull_request:
     branches:
-      - main  # Trigger on pull requests targeting the 'main' branch
+      - master  # Trigger on pull requests targeting the 'master' branch
+      - main
 
 jobs:
   formatting:
