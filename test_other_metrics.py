@@ -245,8 +245,8 @@ class TestSensitivityScore:
     @pytest.mark.parametrize(
         "y_true, y_pred, is_binary, positive_class, result",
         [
-            ([1, 0, 1, 0], [1, 0, 0, 1], "binary", None, 0.5),
-            ([1, 1, 2, 2, 3, 3], [1, 2, 3, 3, 2, 1], "multiclass", 3, 0.0),
+            ([1, 0, 1, 0], [1, 0, 0, 1], True, None, 0.5),
+            ([1, 1, 2, 2, 3, 3], [1, 2, 3, 3, 2, 1], False, 3, 0.0),
         ],
     )
     def test_sensitivityScore_result(
