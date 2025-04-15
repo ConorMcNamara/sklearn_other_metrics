@@ -66,7 +66,7 @@ jobs:
           body: |
             This pull request automatically applies code formatting changes using ruff, autopep8, and docformatter.
           branch: "auto-format-code"
-          base: "main"
+          base: "master"
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -113,5 +113,5 @@ jobs:
           body: |
             This pull request automatically applies docstring generation using pydocstringformatter with the numpydoc style.
           branch: "generate-docstrings"  # The name of the branch to create
-          base: "main"  # Or "master", depending on your main branch
+          base: "master"  # Or "master", depending on your main branch
         continue-on-error: true
