@@ -40,9 +40,7 @@ class TestAdjustedR2Score:
         num_features: Optional[int],
     ) -> None:
         with pytest.raises(Exception):
-            other_metrics.adjusted_r2_score(
-                y_true, y_pred, features_vector, num_features
-            )
+            other_metrics.adjusted_r2_score(y_true, y_pred, features_vector, num_features)
 
     @pytest.mark.parametrize(
         "y_true, y_pred, features_vector, num_features",
@@ -58,12 +56,7 @@ class TestAdjustedR2Score:
         features_vector: Optional[Sequence[str]],
         num_features: Optional[int],
     ) -> None:
-        assert (
-            other_metrics.adjusted_r2_score(
-                y_true, y_pred, features_vector, num_features
-            )
-            == 1
-        )
+        assert other_metrics.adjusted_r2_score(y_true, y_pred, features_vector, num_features) == 1
 
 
 class TestAdjustedExplainedVarianceScore:
@@ -84,9 +77,7 @@ class TestAdjustedExplainedVarianceScore:
         self, y_true: Sequence, y_pred: Sequence, features_vector: Optional[Sequence]
     ) -> None:
         with pytest.raises(Exception):
-            other_metrics.adjusted_explained_variance_score(
-                y_true, y_pred, features_vector
-            )
+            other_metrics.adjusted_explained_variance_score(y_true, y_pred, features_vector)
 
     @pytest.mark.parametrize(
         "y_true, y_pred, features_vector, num_features",
@@ -103,9 +94,7 @@ class TestAdjustedExplainedVarianceScore:
         num_features: Optional[int],
     ) -> None:
         with pytest.raises(Exception):
-            other_metrics.adjusted_explained_variance_score(
-                y_true, y_pred, features_vector, num_features
-            )
+            other_metrics.adjusted_explained_variance_score(y_true, y_pred, features_vector, num_features)
 
     @pytest.mark.parametrize(
         "y_true, y_pred, features_vector, num_features",
@@ -121,12 +110,7 @@ class TestAdjustedExplainedVarianceScore:
         features_vector: Optional[Sequence[str]],
         num_features: Optional[int],
     ) -> None:
-        assert (
-            other_metrics.adjusted_explained_variance_score(
-                y_true, y_pred, features_vector, num_features
-            )
-            == 1
-        )
+        assert other_metrics.adjusted_explained_variance_score(y_true, y_pred, features_vector, num_features) == 1
 
 
 class TestMapeScore:
@@ -155,9 +139,7 @@ class TestGroupMeanLogMAE:
     @staticmethod
     def test_groupMeanLogMAE_PerfectCorrelation() -> None:
         y_true, y_pred, groups = [0, 1, 2, 3], [0, 1, 2, 3], [1, 1, 2, 2]
-        assert other_metrics.group_mean_log_mae(
-            y_true, y_pred, groups
-        ) == pytest.approx(-20.72326583694641)
+        assert other_metrics.group_mean_log_mae(y_true, y_pred, groups) == pytest.approx(-20.72326583694641)
 
 
 class TestGetClassificationLabels:
@@ -218,10 +200,7 @@ class TestSpecificityScore:
         is_binary: bool,
         positive_class: Optional[int],
     ) -> None:
-        assert (
-            other_metrics.specificity_score(y_true, y_pred, is_binary, positive_class)
-            == 0.5
-        )
+        assert other_metrics.specificity_score(y_true, y_pred, is_binary, positive_class) == 0.5
 
 
 class TestSensitivityScore:
@@ -257,10 +236,7 @@ class TestSensitivityScore:
         positive_class: Optional[int],
         result: float,
     ) -> None:
-        assert (
-            other_metrics.sensitivity_score(y_true, y_pred, is_binary, positive_class)
-            == result
-        )
+        assert other_metrics.sensitivity_score(y_true, y_pred, is_binary, positive_class) == result
 
 
 class TestNegativePredictiveScore:
@@ -279,9 +255,7 @@ class TestNegativePredictiveScore:
         positive_class: Optional[Sequence],
     ) -> None:
         with pytest.raises(Exception):
-            other_metrics.negative_predictive_score(
-                y_true, y_pred, is_binary, positive_class
-            )
+            other_metrics.negative_predictive_score(y_true, y_pred, is_binary, positive_class)
 
     @pytest.mark.parametrize(
         "y_true, y_pred, is_binary, positive_class",
@@ -297,12 +271,7 @@ class TestNegativePredictiveScore:
         is_binary: bool,
         positive_class: Optional[int],
     ) -> None:
-        assert (
-            other_metrics.negative_predictive_score(
-                y_true, y_pred, is_binary, positive_class
-            )
-            == 0.5
-        )
+        assert other_metrics.negative_predictive_score(y_true, y_pred, is_binary, positive_class) == 0.5
 
 
 class TestFalseNegativeScore:
@@ -321,9 +290,7 @@ class TestFalseNegativeScore:
         positive_class: Optional[Sequence],
     ) -> None:
         with pytest.raises(Exception):
-            other_metrics.false_negative_score(
-                y_true, y_pred, is_binary, positive_class
-            )
+            other_metrics.false_negative_score(y_true, y_pred, is_binary, positive_class)
 
     @pytest.mark.parametrize(
         "y_true, y_pred, is_binary, positive_class, result",
@@ -340,12 +307,7 @@ class TestFalseNegativeScore:
         positive_class: Optional[int],
         result: float,
     ) -> None:
-        assert (
-            other_metrics.false_negative_score(
-                y_true, y_pred, is_binary, positive_class
-            )
-            == result
-        )
+        assert other_metrics.false_negative_score(y_true, y_pred, is_binary, positive_class) == result
 
 
 class TestFalsePositiveScore:
@@ -364,9 +326,7 @@ class TestFalsePositiveScore:
         positive_class: Optional[Sequence],
     ) -> None:
         with pytest.raises(Exception):
-            other_metrics.false_positive_score(
-                y_true, y_pred, is_binary, positive_class
-            )
+            other_metrics.false_positive_score(y_true, y_pred, is_binary, positive_class)
 
     @pytest.mark.parametrize(
         "y_true, y_pred, is_binary, positive_class, result",
@@ -383,12 +343,7 @@ class TestFalsePositiveScore:
         positive_class: Optional[int],
         result: float,
     ) -> None:
-        assert (
-            other_metrics.false_positive_score(
-                y_true, y_pred, is_binary, positive_class
-            )
-            == result
-        )
+        assert other_metrics.false_positive_score(y_true, y_pred, is_binary, positive_class) == result
 
 
 class TestFalseDiscoveryScore:
@@ -407,9 +362,7 @@ class TestFalseDiscoveryScore:
         positive_class: Optional[Sequence],
     ) -> None:
         with pytest.raises(Exception):
-            other_metrics.false_discovery_score(
-                y_true, y_pred, is_binary, positive_class
-            )
+            other_metrics.false_discovery_score(y_true, y_pred, is_binary, positive_class)
 
     @pytest.mark.parametrize(
         "y_true, y_pred, is_binary, positive_class, result",
@@ -426,12 +379,7 @@ class TestFalseDiscoveryScore:
         positive_class: Optional[int],
         result: float,
     ) -> None:
-        assert (
-            other_metrics.false_discovery_score(
-                y_true, y_pred, is_binary, positive_class
-            )
-            == result
-        )
+        assert other_metrics.false_discovery_score(y_true, y_pred, is_binary, positive_class) == result
 
 
 class TestFalseOmissionRate:
@@ -466,10 +414,7 @@ class TestFalseOmissionRate:
         is_binary: bool,
         positive_class: Optional[int],
     ) -> None:
-        assert (
-            other_metrics.false_omission_rate(y_true, y_pred, is_binary, positive_class)
-            == 0.5
-        )
+        assert other_metrics.false_omission_rate(y_true, y_pred, is_binary, positive_class) == 0.5
 
 
 class TestJScore:
@@ -488,9 +433,7 @@ class TestJScore:
         positive_class: Optional[int],
         result: float,
     ) -> None:
-        assert (
-            other_metrics.j_score(y_true, y_pred, is_binary, positive_class) == result
-        )
+        assert other_metrics.j_score(y_true, y_pred, is_binary, positive_class) == result
 
 
 class TestMarkednessScore:
@@ -509,10 +452,7 @@ class TestMarkednessScore:
         positive_class: Optional[int],
         result: float,
     ) -> None:
-        assert (
-            other_metrics.markedness_score(y_true, y_pred, is_binary, positive_class)
-            == result
-        )
+        assert other_metrics.markedness_score(y_true, y_pred, is_binary, positive_class) == result
 
 
 class TestLikelihoodRatioPositive:
@@ -531,12 +471,7 @@ class TestLikelihoodRatioPositive:
         positive_class: Optional[int],
         result: float,
     ) -> None:
-        assert (
-            other_metrics.likelihood_ratio_positive(
-                y_true, y_pred, is_binary, positive_class
-            )
-            == result
-        )
+        assert other_metrics.likelihood_ratio_positive(y_true, y_pred, is_binary, positive_class) == result
 
 
 class TestLikelihoodRatioNegative:
@@ -555,12 +490,7 @@ class TestLikelihoodRatioNegative:
         positive_class: Optional[int],
         result: float,
     ) -> None:
-        assert (
-            other_metrics.likelihood_ratio_negative(
-                y_true, y_pred, is_binary, positive_class
-            )
-            == result
-        )
+        assert other_metrics.likelihood_ratio_negative(y_true, y_pred, is_binary, positive_class) == result
 
 
 if __name__ == "__main__":
