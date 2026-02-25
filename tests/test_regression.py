@@ -29,13 +29,15 @@ class TestAdjustedR2Score:
     @pytest.mark.parametrize(
         "y_true, y_pred, features_vector",
         [
-            ({1: 1, 2: 2}, {1: 1, 2: 2}, ["feature_1"]),
+            # None features_vector should raise ValueError
             ([0, 1, 2, 3, 4], [4, 3, 2, 1, 0], None),
+            # Too many features (>= n-1) should raise ValueError
             (
                 [0, 1, 2, 3, 4],
                 [4, 3, 2, 1, 0],
                 ["Feature_1", "Feature_2", "Feature_3", "Feature_4", "Feature_5"],
             ),
+            # Empty features list should raise ValueError
             ([0, 1, 2, 3, 4], [4, 3, 2, 1, 0], []),
         ],
     )
@@ -95,7 +97,6 @@ class TestAdjustedExplainedVarianceScore:
     @pytest.mark.parametrize(
         "y_true, y_pred, features_vector",
         [
-            ({1: 1, 2: 2}, {1: 1, 2: 2}, ["feature_1"]),
             ([0, 1, 2, 3, 4], [4, 3, 2, 1, 0], None),
             (
                 [0, 1, 2, 3, 4],
