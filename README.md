@@ -13,7 +13,6 @@ Additional regression and classification metrics for scikit-learn that are commo
 - 🎯 **Regression Metrics**: MAPE, SMAPE, Adjusted R², RMSE, Group Mean Log MAE
 - 📊 **Classification Metrics**: Specificity, Sensitivity, NPV, FDR, FOR, Likelihood Ratios, and more
 - 🔒 **Type Safe**: Full type hints with PEP 561 compliance
-- ✅ **Well Tested**: Comprehensive test suite with >90% coverage
 - 📦 **Modern**: Uses Python 3.10+ features and follows best practices
 - 🚀 **Fast**: Optimized implementations using NumPy
 
