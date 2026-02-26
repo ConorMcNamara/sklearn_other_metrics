@@ -76,13 +76,13 @@ def specificity_score(
     """
     _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)
     if is_binary:
-        tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
+        _tp, fp, _fn, tn = get_classification_labels(y_true, y_pred)
     else:
         if positive_class is not None:
             if isinstance(positive_class, str | int | np.integer):
                 new_y_true = np.where(y_true == positive_class, 1, 0)
                 new_y_pred = np.where(y_pred == positive_class, 1, 0)
-                tp, fp, fn, tn = get_classification_labels(new_y_true, new_y_pred)
+                _tp, fp, _fn, tn = get_classification_labels(new_y_true, new_y_pred)
             else:
                 raise TypeError("positive_class must be str or int for multiclass problem")
         else:
@@ -150,13 +150,13 @@ def sensitivity_score(
     """
     _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)
     if is_binary:
-        tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
+        tp, _fp, fn, _tn = get_classification_labels(y_true, y_pred)
     else:
         if positive_class is not None:
             if isinstance(positive_class, str | int | np.integer):
                 new_y_true = np.where(y_true == positive_class, 1, 0)
                 new_y_pred = np.where(y_pred == positive_class, 1, 0)
-                tp, fp, fn, tn = get_classification_labels(new_y_true, new_y_pred)
+                tp, _fp, fn, _tn = get_classification_labels(new_y_true, new_y_pred)
             else:
                 raise TypeError("positive_class must be str or int for multiclass problem")
         else:
@@ -271,13 +271,13 @@ def negative_predictive_score(
     """
     _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)
     if is_binary:
-        tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
+        _tp, _fp, fn, tn = get_classification_labels(y_true, y_pred)
     else:
         if positive_class is not None:
             if isinstance(positive_class, str | int | np.integer):
                 new_y_true = np.where(y_true == positive_class, 1, 0)
                 new_y_pred = np.where(y_pred == positive_class, 1, 0)
-                tp, fp, fn, tn = get_classification_labels(new_y_true, new_y_pred)
+                _tp, _fp, fn, tn = get_classification_labels(new_y_true, new_y_pred)
             else:
                 raise TypeError("positive_class must be str or int for multiclass problem")
         else:
@@ -348,13 +348,13 @@ def false_negative_score(
     """
     _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)
     if is_binary:
-        tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
+        tp, _fp, fn, _tn = get_classification_labels(y_true, y_pred)
     else:
         if positive_class is not None:
             if isinstance(positive_class, str | int | np.integer):
                 new_y_true = np.where(y_true == positive_class, 1, 0)
                 new_y_pred = np.where(y_pred == positive_class, 1, 0)
-                tp, fp, fn, tn = get_classification_labels(new_y_true, new_y_pred)
+                tp, _fp, fn, _tn = get_classification_labels(new_y_true, new_y_pred)
             else:
                 raise TypeError("positive_class must be str or int for multiclass problem")
         else:
@@ -468,13 +468,13 @@ def false_positive_score(
     """
     _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)
     if is_binary:
-        tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
+        _tp, fp, _fn, tn = get_classification_labels(y_true, y_pred)
     else:
         if positive_class is not None:
             if isinstance(positive_class, str | int | np.integer):
                 new_y_true = np.where(y_true == positive_class, 1, 0)
                 new_y_pred = np.where(y_pred == positive_class, 1, 0)
-                tp, fp, fn, tn = get_classification_labels(new_y_true, new_y_pred)
+                _tp, fp, _fn, tn = get_classification_labels(new_y_true, new_y_pred)
             else:
                 raise TypeError("positive_class must be str or int for multiclass problem")
         else:
@@ -588,13 +588,13 @@ def false_discovery_score(
     """
     _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)
     if is_binary:
-        tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
+        tp, fp, _fn, _tn = get_classification_labels(y_true, y_pred)
     else:
         if positive_class is not None:
             if isinstance(positive_class, str | int | np.integer):
                 new_y_true = np.where(y_true == positive_class, 1, 0)
                 new_y_pred = np.where(y_pred == positive_class, 1, 0)
-                tp, fp, fn, tn = get_classification_labels(new_y_true, new_y_pred)
+                tp, fp, _fn, _tn = get_classification_labels(new_y_true, new_y_pred)
             else:
                 raise TypeError("positive_class must be str or int for multiclass problem")
         else:
@@ -662,13 +662,13 @@ def false_omission_rate(
     """
     _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)
     if is_binary:
-        tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
+        _tp, _fp, fn, tn = get_classification_labels(y_true, y_pred)
     else:
         if positive_class is not None:
             if isinstance(positive_class, str | int | np.integer):
                 new_y_true = np.where(y_true == positive_class, 1, 0)
                 new_y_pred = np.where(y_pred == positive_class, 1, 0)
-                tp, fp, fn, tn = get_classification_labels(new_y_true, new_y_pred)
+                _tp, _fp, fn, tn = get_classification_labels(new_y_true, new_y_pred)
             else:
                 raise TypeError("positive_class must be str or int for multiclass problem")
         else:
@@ -766,13 +766,13 @@ def markedness_score(
     ) -> float:
         _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)
         if is_binary:
-            tp, fp, fn, tn = get_classification_labels(y_true, y_pred)
+            tp, fp, _fn, _tn = get_classification_labels(y_true, y_pred)
         else:
             if positive_class is not None:
                 if isinstance(positive_class, str | int):
                     new_y_true = np.where(y_true == positive_class, 1, 0)
                     new_y_pred = np.where(y_pred == positive_class, 1, 0)
-                    tp, fp, fn, tn = get_classification_labels(new_y_true, new_y_pred)
+                    tp, fp, _fn, _tn = get_classification_labels(new_y_true, new_y_pred)
                 else:
                     raise TypeError("positive_class must be str or int for multiclass problem")
             else:
