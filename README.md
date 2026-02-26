@@ -245,12 +245,23 @@ mypy src/
 # Run all tests
 pytest
 
-# Run with coverage
-pytest --cov
+# Run with coverage report
+pytest --cov=src --cov-report=term-missing
 
-# Run specific test file
-pytest tests/test_regression.py
+# Generate HTML coverage report
+pytest --cov=src --cov-report=html
+
+# Generate XML coverage report (for CI/CD)
+pytest --cov=src --cov-report=xml
+
+# Run specific test file with coverage
+pytest tests/test_regression.py --cov=src
+
+# Set minimum coverage threshold (fail if below 90%)
+pytest --cov=src --cov-fail-under=90
 ```
+
+View the HTML coverage report by opening `htmlcov/index.html` in your browser after running with `--cov-report=html`.
 
 ## Changelog
 
