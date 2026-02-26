@@ -37,7 +37,7 @@ def adjusted_r2_score(
     ValueError
         If number of features is invalid or no features provided.
     """
-    _, y_true, y_pred, multioutput, _ = _check_reg_targets(
+    _, y_true, y_pred, _multioutput, _ = _check_reg_targets(
         y_true, y_pred, sample_weight=None, multioutput="raw_values"
     )
     if features_vector is not None:
@@ -92,7 +92,7 @@ def adjusted_explained_variance_score(
     ValueError
         If number of features is invalid or no features provided.
     """
-    _, y_true, y_pred, multioutput, _ = _check_reg_targets(
+    _, y_true, y_pred, _multioutput, _ = _check_reg_targets(
         y_true, y_pred, sample_weight=None, multioutput="raw_values"
     )
     if features_vector is not None:
@@ -145,7 +145,7 @@ def mape_score(
     ZeroDivisionError
         If y_true contains zero values.
     """
-    _, y_true, y_pred, multioutput, _ = _check_reg_targets(
+    _, y_true, y_pred, _multioutput, _ = _check_reg_targets(
         y_true, y_pred, sample_weight=None, multioutput="raw_values"
     )
     if 0 in y_true:
@@ -171,7 +171,7 @@ def smape_score(
     -------
     Our SMAPE score
     """
-    _, y_true, y_pred, multioutput, _ = _check_reg_targets(
+    _, y_true, y_pred, _multioutput, _ = _check_reg_targets(
         y_true, y_pred, sample_weight=None, multioutput="raw_values"
     )
     error = np.abs(y_true - y_pred)
@@ -196,7 +196,7 @@ def root_mean_squared_error(
     -------
     Our RMSE score
     """
-    _, y_true, y_pred, multioutput, _ = _check_reg_targets(
+    _, y_true, y_pred, _multioutput, _ = _check_reg_targets(
         y_true, y_pred, sample_weight=None, multioutput="raw_values"
     )
     n = len(y_true)
@@ -226,7 +226,7 @@ def group_mean_log_mae(
     -------
     Our Group Mean Log MAE score
     """
-    _, y_true, y_pred, multioutput, _ = _check_reg_targets(
+    _, y_true, y_pred, _multioutput, _ = _check_reg_targets(
         y_true, y_pred, sample_weight=None, multioutput="raw_values"
     )
     y_true = pd.Series([i[0] for i in y_true])

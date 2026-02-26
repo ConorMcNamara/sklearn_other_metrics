@@ -3,6 +3,7 @@
 from collections.abc import Sequence
 
 import pytest
+
 from sklearn_other_metrics import (
     average_false_discovery_score,
     average_false_negative_score,

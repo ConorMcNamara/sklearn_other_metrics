@@ -3,6 +3,7 @@
 from collections.abc import Sequence
 
 import pytest
+
 from sklearn_other_metrics import (
     adjusted_explained_variance_score,
     adjusted_r2_score,
