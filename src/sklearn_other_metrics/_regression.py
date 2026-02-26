@@ -2,6 +2,7 @@
 
 import math
 from collections.abc import Sequence
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -42,18 +43,14 @@ def adjusted_r2_score(
     )
     if features_vector is not None:
         if len(features_vector) >= len(y_true) - 1:
-            raise ValueError(
-                "Number of features is greater than or equal to number of rows minus 1 degree of freedom"
-            )
+            raise ValueError("Number of features is greater than or equal to number of rows minus 1 degree of freedom")
         if len(features_vector) < 1:
             raise ValueError("Cannot have less than one feature")
         p = len(features_vector)
         n = len(y_true)
     elif num_features is not None:
         if num_features >= len(y_true) - 1:
-            raise ValueError(
-                "Number of features is greater than or equal to number of rows minus 1 degree of freedom"
-            )
+            raise ValueError("Number of features is greater than or equal to number of rows minus 1 degree of freedom")
         if num_features < 1:
             raise ValueError("Cannot have less than one feature")
         p = num_features
@@ -97,29 +94,21 @@ def adjusted_explained_variance_score(
     )
     if features_vector is not None:
         if len(features_vector) >= len(y_true) - 1:
-            raise ValueError(
-                "Number of features is greater than or equal to number of rows minus 1 degree of freedom"
-            )
+            raise ValueError("Number of features is greater than or equal to number of rows minus 1 degree of freedom")
         if len(features_vector) < 1:
             raise ValueError("Cannot have less than one feature")
         p = len(features_vector)
         n = len(y_true)
     elif num_features is not None:
         if num_features >= len(y_true) - 1:
-            raise ValueError(
-                "Number of features is greater than or equal to number of rows minus 1 degree of freedom"
-            )
+            raise ValueError("Number of features is greater than or equal to number of rows minus 1 degree of freedom")
         if num_features < 1:
             raise ValueError("Cannot have less than one feature")
         p = num_features
         n = len(y_true)
     else:
         raise ValueError("No features available to calculate adjusted score")
-    evs = (
-        explained_variance_score(y_true, y_pred)
-        if explained_variance_score(y_true, y_pred) > 0
-        else 0
-    )
+    evs = explained_variance_score(y_true, y_pred) if explained_variance_score(y_true, y_pred) > 0 else 0
     return 1 - (1 - evs) * (n - 1) / (n - p - 1)
 
 
@@ -150,7 +139,7 @@ def mape_score(
     )
     if 0 in y_true:
         raise ZeroDivisionError("Cannot calculate MAPE when y_true contains zero values")
-    return np.mean(np.abs((y_true - y_pred) / y_true)) * 100
+    return float(np.mean(np.abs((y_true - y_pred) / y_true)) * 100)
 
 
 def smape_score(
@@ -176,7 +165,7 @@ def smape_score(
     )
     error = np.abs(y_true - y_pred)
     total = np.abs(y_true) + np.abs(y_pred)
-    return 100 * np.sum(error / total) / len(error)
+    return float(100 * np.sum(error / total) / len(error))
 
 
 def root_mean_squared_error(
@@ -204,9 +193,9 @@ def root_mean_squared_error(
 
 
 def group_mean_log_mae(
-    y_true: pd.DataFrame | pd.Series | Sequence | np.ndarray,
-    y_pred: pd.DataFrame | pd.Series | Sequence | np.ndarray,
-    groups: Sequence | np.ndarray | pd.Series,
+    y_true: pd.DataFrame | pd.Series | Sequence[Any] | np.ndarray,
+    y_pred: pd.DataFrame | pd.Series | Sequence[Any] | np.ndarray,
+    groups: Sequence[Any] | np.ndarray | pd.Series,
     floor: float = 1e-9,
 ) -> float:
     """Calculates the Group Mean Log Mean Absolute Error. Used in a Kaggle competition.
@@ -232,4 +221,4 @@ def group_mean_log_mae(
     y_true = pd.Series([i[0] for i in y_true])
     y_pred = pd.Series([i[0] for i in y_pred])
     maes = (y_true - y_pred).abs().groupby(groups).mean()
-    return np.log(maes.map(lambda x: max(x, floor))).mean()
+    return float(np.log(maes.map(lambda x: max(x, floor))).mean())

@@ -40,9 +40,7 @@ class TestGetClassificationLabels:
         "y_true, y_pred",
         [([0, 1, 2, 3, 4], [0, 0, 1, 1, 0]), ([0, 0, 1, 1, 1], [0, 1, 2, 0, 1, 2])],
     )
-    def test_more_than_two_classes_raises_exception(
-        self, y_true: Sequence[int], y_pred: Sequence[int]
-    ) -> None:
+    def test_more_than_two_classes_raises_exception(self, y_true: Sequence[int], y_pred: Sequence[int]) -> None:
         """Test that ValueError is raised when more than 2 classes are present."""
         with pytest.raises(ValueError):
             get_classification_labels(y_true, y_pred)
@@ -52,9 +50,7 @@ class TestGetClassificationLabels:
         """Test that classification labels are correctly calculated."""
         y_true = [0, 0, 1, 1]
         y_pred = [0, 0, 1, 1]
-        true_positive, false_positive, false_negative, true_negative = get_classification_labels(
-            y_true, y_pred
-        )
+        true_positive, false_positive, false_negative, true_negative = get_classification_labels(y_true, y_pred)
         assert true_positive == 2
         assert false_positive == 0
         assert true_negative == 2
@@ -432,9 +428,7 @@ class TestAverageMetrics:
         """Fixture for multiclass classification data."""
         return [1, 1, 2, 2, 3, 3], [1, 2, 3, 3, 2, 1]
 
-    def test_all_average_functions_return_float(
-        self, multiclass_data: tuple[list[int], list[int]]
-    ) -> None:
+    def test_all_average_functions_return_float(self, multiclass_data: tuple[list[int], list[int]]) -> None:
         """Test that all average functions return float values."""
         y_true, y_pred = multiclass_data
 
