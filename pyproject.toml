@@ -143,3 +143,6 @@ skip_covered = false
 
 [tool.coverage.html]
 directory = "htmlcov"
+
+[tool.zuban]
+mode = "default"
