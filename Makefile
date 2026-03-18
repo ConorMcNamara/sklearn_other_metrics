@@ -36,8 +36,8 @@ format: ## Format code with ruff
 format-check: ## Check code formatting without making changes
 	ruff format --check .
 
-type-check: ## Run mypy type checking
-	mypy src/
+type-check: ## Run zuban type checking
+	zuban src/
 
 check: lint format-check type-check test ## Run all checks (lint, format, type-check, test)
 
@@ -52,7 +52,7 @@ clean: ## Remove build artifacts and cache files
 	rm -rf dist/
 	rm -rf *.egg-info
 	rm -rf .pytest_cache
-	rm -rf .mypy_cache
+	rm -rf .zuban_cache
 	rm -rf .ruff_cache
 	rm -rf htmlcov/
 	rm -rf .coverage
