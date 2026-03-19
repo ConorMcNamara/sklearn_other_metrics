@@ -4,7 +4,7 @@
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
-[![Typed with mypy](https://img.shields.io/badge/typed-mypy-blue.svg)](https://github.com/python/mypy)
+[![Typed with zuban](https://img.shields.io/badge/typed-zuban-blue.svg)](https://github.com/zubanls/zuban)
 
 Additional regression and classification metrics for scikit-learn that are commonly used in machine learning but not included in the standard library.
 
@@ -188,7 +188,7 @@ Exception types used:
 
 ## Type Safety
 
-This package is fully typed and passes strict mypy checking:
+This package is fully typed and passes zuban type checking:
 
 ```python
 from sklearn_other_metrics import mape_score
@@ -235,7 +235,7 @@ pytest
 ruff check .
 
 # Run type checking
-mypy src/
+zuban check
 ```
 
 ### Running Tests
