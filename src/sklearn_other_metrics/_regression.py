@@ -139,7 +139,9 @@ def mape_score(
     )
     if 0 in y_true:
         raise ZeroDivisionError("Cannot calculate MAPE when y_true contains zero values")
-    return float(np.mean(np.abs((y_true - y_pred) / y_true)) * 100)
+    # np.asarray() casts to ndarray so the - operator is valid; _check_reg_targets already
+    # returns arrays at runtime but its stub doesn't narrow the type away from Sequence[float].
+    return float(np.mean(np.abs((np.asarray(y_true) - np.asarray(y_pred)) / np.asarray(y_true))) * 100)
 
 
 def smape_score(
@@ -163,8 +165,10 @@ def smape_score(
     _, y_true, y_pred, _multioutput, _ = _check_reg_targets(
         y_true, y_pred, sample_weight=None, multioutput="raw_values"
     )
-    error = np.abs(y_true - y_pred)
-    total = np.abs(y_true) + np.abs(y_pred)
+    # np.asarray() casts to ndarray so the - operator is valid; _check_reg_targets already
+    # returns arrays at runtime but its stub doesn't narrow the type away from Sequence[float].
+    error = np.abs(np.asarray(y_true) - np.asarray(y_pred))
+    total = np.abs(np.asarray(y_true)) + np.abs(np.asarray(y_pred))
     return float(100 * np.sum(error / total) / len(error))
 
 
@@ -189,7 +193,9 @@ def root_mean_squared_error(
         y_true, y_pred, sample_weight=None, multioutput="raw_values"
     )
     n = len(y_true)
-    return math.sqrt(np.sum((y_true - y_pred) ** 2) / n)
+    # np.asarray() casts to ndarray so the - operator is valid; _check_reg_targets already
+    # returns arrays at runtime but its stub doesn't narrow the type away from Sequence[float].
+    return math.sqrt(np.sum((np.asarray(y_true) - np.asarray(y_pred)) ** 2) / n)
 
 
 def group_mean_log_mae(
@@ -215,10 +221,16 @@ def group_mean_log_mae(
     -------
     Our Group Mean Log MAE score
     """
-    _, y_true, y_pred, _multioutput, _ = _check_reg_targets(
+    # _check_reg_targets returns ndarray but its stub types the return as Any | csr_matrix,
+    # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
+    _, y_true, y_pred, _multioutput, _ = _check_reg_targets(  # type: ignore[assignment]
         y_true, y_pred, sample_weight=None, multioutput="raw_values"
     )
-    y_true = pd.Series([i[0] for i in y_true])
-    y_pred = pd.Series([i[0] for i in y_pred])
-    maes = (y_true - y_pred).abs().groupby(groups).mean()
+    # np.asarray() ensures elements are indexable; _check_reg_targets returns a 2D array
+    # so each row i is a 1-element array and i[0] extracts the scalar value.
+    y_true = pd.Series([i[0] for i in np.asarray(y_true)])
+    y_pred = pd.Series([i[0] for i in np.asarray(y_pred)])
+    # groups is typed broadly as Sequence | ndarray | Series but groupby expects a narrower
+    # type; the runtime behaviour is correct so we suppress the type mismatch here.
+    maes = (y_true - y_pred).abs().groupby(groups).mean()  # type: ignore[arg-type]
     return float(np.log(maes.map(lambda x: max(x, floor))).mean())

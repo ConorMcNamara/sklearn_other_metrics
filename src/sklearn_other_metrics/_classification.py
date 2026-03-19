@@ -30,7 +30,9 @@ def get_classification_labels(
     ValueError
         If more than two classes are present for a binary problem.
     """
-    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)
+    # _check_targets returns ndarray but its stub types the return as Any | csr_matrix,
+    # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
+    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment]
     if len(np.unique(y_true)) > 2:
         raise ValueError("More than two classes present in y_true for a binary classification problem")
     if len(np.unique(y_pred)) > 2:
@@ -74,7 +76,9 @@ def specificity_score(
     ValueError
         If positive_class is None for multiclass problem.
     """
-    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)
+    # _check_targets returns ndarray but its stub types the return as Any | csr_matrix,
+    # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
+    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment]
     if is_binary:
         _tp, fp, _fn, tn = get_classification_labels(y_true, y_pred)
     else:
@@ -148,7 +152,9 @@ def sensitivity_score(
     ValueError
         If positive_class is None for multiclass problem.
     """
-    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)
+    # _check_targets returns ndarray but its stub types the return as Any | csr_matrix,
+    # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
+    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment]
     if is_binary:
         tp, _fp, fn, _tn = get_classification_labels(y_true, y_pred)
     else:
@@ -269,7 +275,9 @@ def negative_predictive_score(
     ValueError
         If positive_class is None for multiclass problem.
     """
-    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)
+    # _check_targets returns ndarray but its stub types the return as Any | csr_matrix,
+    # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
+    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment]
     if is_binary:
         _tp, _fp, fn, tn = get_classification_labels(y_true, y_pred)
     else:
@@ -346,7 +354,9 @@ def false_negative_score(
     ValueError
         If positive_class is None for multiclass problem.
     """
-    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)
+    # _check_targets returns ndarray but its stub types the return as Any | csr_matrix,
+    # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
+    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment]
     if is_binary:
         tp, _fp, fn, _tn = get_classification_labels(y_true, y_pred)
     else:
@@ -466,7 +476,9 @@ def false_positive_score(
     ValueError
         If positive_class is None for multiclass problem.
     """
-    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)
+    # _check_targets returns ndarray but its stub types the return as Any | csr_matrix,
+    # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
+    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment]
     if is_binary:
         _tp, fp, _fn, tn = get_classification_labels(y_true, y_pred)
     else:
@@ -586,7 +598,9 @@ def false_discovery_score(
     ValueError
         If positive_class is None for multiclass problem.
     """
-    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)
+    # _check_targets returns ndarray but its stub types the return as Any | csr_matrix,
+    # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
+    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment]
     if is_binary:
         tp, fp, _fn, _tn = get_classification_labels(y_true, y_pred)
     else:
@@ -660,7 +674,9 @@ def false_omission_rate(
     ValueError
         If positive_class is None for multiclass problem.
     """
-    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)
+    # _check_targets returns ndarray but its stub types the return as Any | csr_matrix,
+    # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
+    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment]
     if is_binary:
         _tp, _fp, fn, tn = get_classification_labels(y_true, y_pred)
     else:
@@ -764,7 +780,9 @@ def markedness_score(
         is_binary: bool = True,
         positive_class: str | int | None = None,
     ) -> float:
-        _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)
+        # _check_targets returns ndarray but its stub types the return as Any | csr_matrix,
+        # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
+        _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment]
         if is_binary:
             tp, fp, _fn, _tn = get_classification_labels(y_true, y_pred)
         else:

@@ -76,7 +76,9 @@ class TestSpecificityScore:
     ) -> None:
         """Test that appropriate exceptions are raised for invalid positive_class."""
         with pytest.raises((TypeError, ValueError)):
-            specificity_score(y_true, y_pred, is_binary, positive_class)
+            # Intentionally passing an invalid type for positive_class to verify TypeError is raised;
+            # the ignore suppresses the expected arg-type mismatch at the call site.
+            specificity_score(y_true, y_pred, is_binary, positive_class)  # type: ignore[arg-type]
 
     @pytest.mark.parametrize(
         "y_true, y_pred, is_binary, positive_class, expected",
@@ -129,7 +131,9 @@ class TestSensitivityScore:
     ) -> None:
         """Test that appropriate exceptions are raised for invalid positive_class."""
         with pytest.raises((TypeError, ValueError)):
-            sensitivity_score(y_true, y_pred, is_binary, positive_class)
+            # Intentionally passing an invalid type for positive_class to verify TypeError is raised;
+            # the ignore suppresses the expected arg-type mismatch at the call site.
+            sensitivity_score(y_true, y_pred, is_binary, positive_class)  # type: ignore[arg-type]
 
     @pytest.mark.parametrize(
         "y_true, y_pred, is_binary, positive_class, expected",
@@ -196,7 +200,9 @@ class TestNegativePredictiveScore:
     ) -> None:
         """Test that appropriate exceptions are raised for invalid positive_class."""
         with pytest.raises((TypeError, ValueError)):
-            negative_predictive_score(y_true, y_pred, is_binary, positive_class)
+            # Intentionally passing an invalid type for positive_class to verify TypeError is raised;
+            # the ignore suppresses the expected arg-type mismatch at the call site.
+            negative_predictive_score(y_true, y_pred, is_binary, positive_class)  # type: ignore[arg-type]
 
     @pytest.mark.parametrize(
         "y_true, y_pred, is_binary, positive_class, expected",

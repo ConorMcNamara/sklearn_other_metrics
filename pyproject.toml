@@ -146,3 +146,8 @@ directory = "htmlcov"
 
 [tool.zuban]
 mode = "default"
+# Recommended (and the default) for untyped code
+untyped_strict_optional = true
+
+# Mypy's default is "any", Zuban's "inferred"
+untyped_function_return_mode = "inferred"
