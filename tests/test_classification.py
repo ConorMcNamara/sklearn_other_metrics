@@ -1,6 +1,7 @@
 """Tests for classification metrics."""
 
 from collections.abc import Sequence
+from typing import Any
 
 import pytest
 
@@ -72,7 +73,7 @@ class TestSpecificityScore:
         y_true: Sequence[int],
         y_pred: Sequence[int],
         is_binary: bool,
-        positive_class: Sequence | None,
+        positive_class: Sequence[Any] | None,
     ) -> None:
         """Test that appropriate exceptions are raised for invalid positive_class."""
         with pytest.raises((TypeError, ValueError)):
@@ -127,7 +128,7 @@ class TestSensitivityScore:
         y_true: Sequence[int],
         y_pred: Sequence[int],
         is_binary: bool,
-        positive_class: Sequence | None,
+        positive_class: Sequence[Any] | None,
     ) -> None:
         """Test that appropriate exceptions are raised for invalid positive_class."""
         with pytest.raises((TypeError, ValueError)):
@@ -196,7 +197,7 @@ class TestNegativePredictiveScore:
         y_true: Sequence[int],
         y_pred: Sequence[int],
         is_binary: bool,
-        positive_class: Sequence | None,
+        positive_class: Sequence[Any] | None,
     ) -> None:
         """Test that appropriate exceptions are raised for invalid positive_class."""
         with pytest.raises((TypeError, ValueError)):

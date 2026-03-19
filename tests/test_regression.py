@@ -1,6 +1,7 @@
 """Tests for regression metrics."""
 
 from collections.abc import Sequence
+from typing import Any
 
 import pytest
 
@@ -43,7 +44,7 @@ class TestAdjustedR2Score:
         ],
     )
     def test_features_vector_exception(
-        self, y_true: Sequence, y_pred: Sequence, features_vector: Sequence | None
+        self, y_true: Sequence[Any], y_pred: Sequence[Any], features_vector: Sequence[Any] | None
     ) -> None:
         """Test that ValueError is raised for invalid features_vector."""
         with pytest.raises(ValueError):
@@ -108,7 +109,7 @@ class TestAdjustedExplainedVarianceScore:
         ],
     )
     def test_features_vector_exception(
-        self, y_true: Sequence, y_pred: Sequence, features_vector: Sequence | None
+        self, y_true: Sequence[Any], y_pred: Sequence[Any], features_vector: Sequence[Any] | None
     ) -> None:
         """Test that ValueError is raised for invalid features_vector."""
         with pytest.raises(ValueError):

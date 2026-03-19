@@ -193,6 +193,7 @@ This package is fully typed and passes zuban type checking:
 ```python
 from sklearn_other_metrics import mape_score
 import numpy as np
+import pandas as pd
 
 # All these work fine
 y_true_list = [1, 2, 3]

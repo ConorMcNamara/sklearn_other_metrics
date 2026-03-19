@@ -32,7 +32,7 @@ def get_classification_labels(
     """
     # _check_targets returns ndarray but its stub types the return as Any | csr_matrix,
     # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
-    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment]
+    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment, no-untyped-call]
     if len(np.unique(y_true)) > 2:
         raise ValueError("More than two classes present in y_true for a binary classification problem")
     if len(np.unique(y_pred)) > 2:
@@ -78,7 +78,7 @@ def specificity_score(
     """
     # _check_targets returns ndarray but its stub types the return as Any | csr_matrix,
     # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
-    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment]
+    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment, no-untyped-call]
     if is_binary:
         _tp, fp, _fn, tn = get_classification_labels(y_true, y_pred)
     else:
@@ -154,7 +154,7 @@ def sensitivity_score(
     """
     # _check_targets returns ndarray but its stub types the return as Any | csr_matrix,
     # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
-    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment]
+    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment, no-untyped-call]
     if is_binary:
         tp, _fp, fn, _tn = get_classification_labels(y_true, y_pred)
     else:
@@ -277,7 +277,7 @@ def negative_predictive_score(
     """
     # _check_targets returns ndarray but its stub types the return as Any | csr_matrix,
     # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
-    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment]
+    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment, no-untyped-call]
     if is_binary:
         _tp, _fp, fn, tn = get_classification_labels(y_true, y_pred)
     else:
@@ -356,7 +356,7 @@ def false_negative_score(
     """
     # _check_targets returns ndarray but its stub types the return as Any | csr_matrix,
     # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
-    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment]
+    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment, no-untyped-call]
     if is_binary:
         tp, _fp, fn, _tn = get_classification_labels(y_true, y_pred)
     else:
@@ -478,7 +478,7 @@ def false_positive_score(
     """
     # _check_targets returns ndarray but its stub types the return as Any | csr_matrix,
     # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
-    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment]
+    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment, no-untyped-call]
     if is_binary:
         _tp, fp, _fn, tn = get_classification_labels(y_true, y_pred)
     else:
@@ -600,7 +600,7 @@ def false_discovery_score(
     """
     # _check_targets returns ndarray but its stub types the return as Any | csr_matrix,
     # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
-    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment]
+    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment, no-untyped-call]
     if is_binary:
         tp, fp, _fn, _tn = get_classification_labels(y_true, y_pred)
     else:
@@ -676,7 +676,7 @@ def false_omission_rate(
     """
     # _check_targets returns ndarray but its stub types the return as Any | csr_matrix,
     # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
-    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment]
+    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment, no-untyped-call]
     if is_binary:
         _tp, _fp, fn, tn = get_classification_labels(y_true, y_pred)
     else:
@@ -782,7 +782,7 @@ def markedness_score(
     ) -> float:
         # _check_targets returns ndarray but its stub types the return as Any | csr_matrix,
         # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
-        _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment]
+        _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment, no-untyped-call]
         if is_binary:
             tp, fp, _fn, _tn = get_classification_labels(y_true, y_pred)
         else:

@@ -38,7 +38,7 @@ def adjusted_r2_score(
     ValueError
         If number of features is invalid or no features provided.
     """
-    _, y_true, y_pred, _multioutput, _ = _check_reg_targets(
+    _, y_true, y_pred, _multioutput, _ = _check_reg_targets(  # type: ignore[no-untyped-call]
         y_true, y_pred, sample_weight=None, multioutput="raw_values"
     )
     if features_vector is not None:
@@ -89,7 +89,7 @@ def adjusted_explained_variance_score(
     ValueError
         If number of features is invalid or no features provided.
     """
-    _, y_true, y_pred, _multioutput, _ = _check_reg_targets(
+    _, y_true, y_pred, _multioutput, _ = _check_reg_targets(  # type: ignore[no-untyped-call]
         y_true, y_pred, sample_weight=None, multioutput="raw_values"
     )
     if features_vector is not None:
@@ -134,7 +134,7 @@ def mape_score(
     ZeroDivisionError
         If y_true contains zero values.
     """
-    _, y_true, y_pred, _multioutput, _ = _check_reg_targets(
+    _, y_true, y_pred, _multioutput, _ = _check_reg_targets(  # type: ignore[no-untyped-call]
         y_true, y_pred, sample_weight=None, multioutput="raw_values"
     )
     if 0 in y_true:
@@ -162,7 +162,7 @@ def smape_score(
     -------
     Our SMAPE score
     """
-    _, y_true, y_pred, _multioutput, _ = _check_reg_targets(
+    _, y_true, y_pred, _multioutput, _ = _check_reg_targets(  # type: ignore[no-untyped-call]
         y_true, y_pred, sample_weight=None, multioutput="raw_values"
     )
     # np.asarray() casts to ndarray so the - operator is valid; _check_reg_targets already
@@ -189,7 +189,7 @@ def root_mean_squared_error(
     -------
     Our RMSE score
     """
-    _, y_true, y_pred, _multioutput, _ = _check_reg_targets(
+    _, y_true, y_pred, _multioutput, _ = _check_reg_targets(  # type: ignore[no-untyped-call]
         y_true, y_pred, sample_weight=None, multioutput="raw_values"
     )
     n = len(y_true)
@@ -223,7 +223,7 @@ def group_mean_log_mae(
     """
     # _check_reg_targets returns ndarray but its stub types the return as Any | csr_matrix,
     # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
-    _, y_true, y_pred, _multioutput, _ = _check_reg_targets(  # type: ignore[assignment]
+    _, y_true, y_pred, _multioutput, _ = _check_reg_targets(  # type: ignore[assignment, no-untyped-call]
         y_true, y_pred, sample_weight=None, multioutput="raw_values"
     )
     # np.asarray() ensures elements are indexable; _check_reg_targets returns a 2D array
