@@ -10,42 +10,42 @@ help: ## Show this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
 install: ## Install package dependencies
-	uv pip install -e .
+	uv sync
 
 install-dev: ## Install package with dev dependencies
-	uv pip install -e ".[dev]"
+	uv sync --extra dev
 
 test: ## Run tests
-	pytest
+	uv run pytest
 
 test-cov: ## Run tests with coverage report
-	pytest --cov=src/sklearn_other_metrics --cov-report=term-missing --cov-report=html --cov-report=xml
+	uv run pytest --cov=src/sklearn_other_metrics --cov-report=term-missing --cov-report=html --cov-report=xml
 
 test-fast: ## Run tests without coverage
-	pytest --no-cov -v
+	uv run pytest --no-cov -v
 
 lint: ## Run ruff linter
-	ruff check .
+	uv run ruff check .
 
 lint-fix: ## Run ruff linter with auto-fix
-	ruff check --fix .
+	uv run ruff check --fix .
 
 format: ## Format code with ruff
-	ruff format .
+	uv run ruff format .
 
 format-check: ## Check code formatting without making changes
-	ruff format --check .
+	uv run ruff format --check .
 
 type-check: ## Run zuban type checking
-	zuban src/
+	uv run zuban check
 
 check: lint format-check type-check test ## Run all checks (lint, format, type-check, test)
 
 pre-commit-install: ## Install pre-commit hooks
-	pre-commit install
+	uv run pre-commit install
 
 pre-commit-run: ## Run pre-commit on all files
-	pre-commit run --all-files
+	uv run pre-commit run --all-files
 
 clean: ## Remove build artifacts and cache files
 	rm -rf build/
@@ -62,7 +62,6 @@ clean: ## Remove build artifacts and cache files
 	find . -type f -name "*.pyo" -delete
 
 build: clean ## Build distribution packages
-	uv pip install build
-	python -m build
+	uv build
 
 all: clean install-dev pre-commit-install check ## Setup dev environment and run all checks
