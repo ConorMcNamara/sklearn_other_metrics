@@ -11,6 +11,9 @@ Thank you for your interest in contributing to sklearn-other-metrics! This docum
 
 - Python 3.10 or higher
 - Git
+- [uv](https://docs.astral.sh/uv/) — the project uses uv for dependency management, and CI runs against the
+  versions pinned in `uv.lock`. Install it with `curl -LsSf https://astral.sh/uv/install.sh | sh` (see the
+  [uv install docs](https://docs.astral.sh/uv/getting-started/installation/) for other options).
 
 ### Setting Up Your Development Environment
 
@@ -21,24 +24,25 @@ git clone https://github.com/YOUR_USERNAME/sklearn_other_metrics.git
 cd sklearn_other_metrics
 ```
 
-2. **Create a virtual environment**
+2. **Install the project and its dev dependencies**
 
 ```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+uv sync --extra dev
 ```
 
-3. **Install the package in development mode**
+This creates a virtual environment in `.venv` and installs the locked dependencies. Prefix commands with
+`uv run` (e.g. `uv run pytest`) to run them inside that environment, or activate it with
+`source .venv/bin/activate` (on Windows: `.venv\Scripts\activate`).
+
+3. **Install pre-commit hooks**
 
 ```bash
-pip install -e ".[dev]"
+uv run pre-commit install
 ```
 
-4. **Install pre-commit hooks**
-
-```bash
-pre-commit install
-```
+> [!TIP]
+> If you change dependencies in `pyproject.toml`, regenerate the lockfile with `uv lock` and commit the updated
+> `uv.lock`. CI runs `uv sync --locked` and will fail if the lockfile is out of sync with `pyproject.toml`.
 
 ## Development Workflow
 
@@ -46,36 +50,36 @@ pre-commit install
 
 This project uses:
 - **Ruff** for linting and formatting
-- **MyPy** for type checking
+- **zuban** for type checking
 - **Pre-commit** hooks to ensure code quality
 
 Before committing, ensure your code passes all checks:
 
 ```bash
 # Format code
-ruff format .
+uv run ruff format .
 
 # Lint code
-ruff check . --fix
+uv run ruff check . --fix
 
 # Type check
-mypy src/
+uv run zuban check
 ```
 
 ### Running Tests
 
 ```bash
 # Run all tests
-pytest
+uv run pytest
 
 # Run with coverage
-pytest --cov
+uv run pytest --cov
 
 # Run specific test file
-pytest tests/test_regression.py
+uv run pytest tests/test_regression.py
 
 # Run specific test
-pytest tests/test_regression.py::TestMapeScore::test_perfect_correlation
+uv run pytest tests/test_regression.py::TestMapeScore::test_perfect_correlation
 ```
 
 ### Type Hints
@@ -187,10 +191,10 @@ git checkout -b feature/my-new-feature
 3. **Ensure all checks pass**
 
 ```bash
-pytest
-ruff check .
-ruff format --check .
-mypy src/
+uv run pytest
+uv run ruff check .
+uv run ruff format --check .
+uv run zuban check
 ```
 
 4. **Commit your changes**
