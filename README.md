@@ -22,13 +22,16 @@ Additional regression and classification metrics for scikit-learn that are commo
 pip install sklearn-other-metrics
 ```
 
-For development:
+For development, this project uses [uv](https://docs.astral.sh/uv/):
 
 ```bash
 git clone https://github.com/ConorMcNamara/sklearn_other_metrics.git
 cd sklearn_other_metrics
-pip install -e ".[dev]"
+uv sync --extra dev
 ```
+
+This creates a `.venv` and installs the locked dependencies. Prefix commands with `uv run` (e.g. `uv run pytest`)
+to run them inside that environment.
 
 ## Quick Start
 
@@ -223,42 +226,42 @@ We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 git clone https://github.com/ConorMcNamara/sklearn_other_metrics.git
 cd sklearn_other_metrics
 
-# Install with dev dependencies
-pip install -e ".[dev]"
+# Install with dev dependencies (creates .venv from uv.lock)
+uv sync --extra dev
 
 # Install pre-commit hooks
-pre-commit install
+uv run pre-commit install
 
 # Run tests
-pytest
+uv run pytest
 
 # Run linting
-ruff check .
+uv run ruff check .
 
 # Run type checking
-zuban check
+uv run zuban check
 ```
 
 ### Running Tests
 
 ```bash
 # Run all tests
-pytest
+uv run pytest
 
 # Run with coverage report
-pytest --cov=src --cov-report=term-missing
+uv run pytest --cov=src --cov-report=term-missing
 
 # Generate HTML coverage report
-pytest --cov=src --cov-report=html
+uv run pytest --cov=src --cov-report=html
 
 # Generate XML coverage report (for CI/CD)
-pytest --cov=src --cov-report=xml
+uv run pytest --cov=src --cov-report=xml
 
 # Run specific test file with coverage
-pytest tests/test_regression.py --cov=src
+uv run pytest tests/test_regression.py --cov=src
 
 # Set minimum coverage threshold (fail if below 90%)
-pytest --cov=src --cov-fail-under=90
+uv run pytest --cov=src --cov-fail-under=90
 ```
 
 View the HTML coverage report by opening `htmlcov/index.html` in your browser after running with `--cov-report=html`.
