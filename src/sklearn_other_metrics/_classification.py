@@ -34,6 +34,10 @@ def get_classification_labels(
     # _check_targets returns ndarray but its stub types the return as Any | csr_matrix,
     # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
     _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment, no-untyped-call]
+    # _check_targets already returns arrays at runtime; np.asarray narrows the loose annotation
+    # so the element-wise comparisons below produce boolean arrays that np.where accepts.
+    y_true = np.asarray(y_true)
+    y_pred = np.asarray(y_pred)
     if len(np.unique(y_true)) > 2:
         raise ValueError("More than two classes present in y_true for a binary classification problem")
     if len(np.unique(y_pred)) > 2:
