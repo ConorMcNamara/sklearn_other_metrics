@@ -1,6 +1,7 @@
 """Classification metrics not included in scikit-learn."""
 
 from collections.abc import Sequence
+from typing import cast
 
 import numpy as np
 import pandas as pd
@@ -31,13 +32,13 @@ def get_classification_labels(
     ValueError
         If more than two classes are present for a binary problem.
     """
-    # _check_targets returns ndarray but its stub types the return as Any | csr_matrix,
-    # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
-    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment, no-untyped-call]
-    # _check_targets already returns arrays at runtime; np.asarray narrows the loose annotation
-    # so the element-wise comparisons below produce boolean arrays that np.where accepts.
-    y_true = np.asarray(y_true)
-    y_pred = np.asarray(y_pred)
+    # scikit-learn 1.9 inserted unique_labels_ as the 2nd return value, so index from the end to
+    # support both the 4-tuple (<1.9) and 5-tuple (>=1.9) layouts; sample_weight is always last.
+    # _check_targets already returns arrays at runtime, so cast narrows away from the loose
+    # annotation, letting the element-wise comparisons below produce arrays that np.where accepts.
+    _checked = _check_targets(y_true, y_pred)  # type: ignore[no-untyped-call]
+    y_true = cast("np.ndarray", _checked[-3])
+    y_pred = cast("np.ndarray", _checked[-2])
     if len(np.unique(y_true)) > 2:
         raise ValueError("More than two classes present in y_true for a binary classification problem")
     if len(np.unique(y_pred)) > 2:
@@ -81,9 +82,10 @@ def specificity_score(
     ValueError
         If positive_class is None for multiclass problem.
     """
-    # _check_targets returns ndarray but its stub types the return as Any | csr_matrix,
-    # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
-    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment, no-untyped-call]
+    # scikit-learn 1.9 inserted unique_labels_ as the 2nd return value, so index from the end to
+    # support both the 4-tuple (<1.9) and 5-tuple (>=1.9) layouts; sample_weight is always last.
+    _checked = _check_targets(y_true, y_pred)  # type: ignore[no-untyped-call]
+    y_true, y_pred = _checked[-3], _checked[-2]
     if is_binary:
         _tp, fp, _fn, tn = get_classification_labels(y_true, y_pred)
     else:
@@ -158,9 +160,10 @@ def sensitivity_score(
     ValueError
         If positive_class is None for multiclass problem.
     """
-    # _check_targets returns ndarray but its stub types the return as Any | csr_matrix,
-    # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
-    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment, no-untyped-call]
+    # scikit-learn 1.9 inserted unique_labels_ as the 2nd return value, so index from the end to
+    # support both the 4-tuple (<1.9) and 5-tuple (>=1.9) layouts; sample_weight is always last.
+    _checked = _check_targets(y_true, y_pred)  # type: ignore[no-untyped-call]
+    y_true, y_pred = _checked[-3], _checked[-2]
     if is_binary:
         tp, _fp, fn, _tn = get_classification_labels(y_true, y_pred)
     else:
@@ -284,9 +287,10 @@ def negative_predictive_score(
     ValueError
         If positive_class is None for multiclass problem.
     """
-    # _check_targets returns ndarray but its stub types the return as Any | csr_matrix,
-    # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
-    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment, no-untyped-call]
+    # scikit-learn 1.9 inserted unique_labels_ as the 2nd return value, so index from the end to
+    # support both the 4-tuple (<1.9) and 5-tuple (>=1.9) layouts; sample_weight is always last.
+    _checked = _check_targets(y_true, y_pred)  # type: ignore[no-untyped-call]
+    y_true, y_pred = _checked[-3], _checked[-2]
     if is_binary:
         _tp, _fp, fn, tn = get_classification_labels(y_true, y_pred)
     else:
@@ -365,9 +369,10 @@ def false_negative_score(
     ValueError
         If positive_class is None for multiclass problem.
     """
-    # _check_targets returns ndarray but its stub types the return as Any | csr_matrix,
-    # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
-    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment, no-untyped-call]
+    # scikit-learn 1.9 inserted unique_labels_ as the 2nd return value, so index from the end to
+    # support both the 4-tuple (<1.9) and 5-tuple (>=1.9) layouts; sample_weight is always last.
+    _checked = _check_targets(y_true, y_pred)  # type: ignore[no-untyped-call]
+    y_true, y_pred = _checked[-3], _checked[-2]
     if is_binary:
         tp, _fp, fn, _tn = get_classification_labels(y_true, y_pred)
     else:
@@ -488,9 +493,10 @@ def false_positive_score(
     ValueError
         If positive_class is None for multiclass problem.
     """
-    # _check_targets returns ndarray but its stub types the return as Any | csr_matrix,
-    # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
-    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment, no-untyped-call]
+    # scikit-learn 1.9 inserted unique_labels_ as the 2nd return value, so index from the end to
+    # support both the 4-tuple (<1.9) and 5-tuple (>=1.9) layouts; sample_weight is always last.
+    _checked = _check_targets(y_true, y_pred)  # type: ignore[no-untyped-call]
+    y_true, y_pred = _checked[-3], _checked[-2]
     if is_binary:
         _tp, fp, _fn, tn = get_classification_labels(y_true, y_pred)
     else:
@@ -611,9 +617,10 @@ def false_discovery_score(
     ValueError
         If positive_class is None for multiclass problem.
     """
-    # _check_targets returns ndarray but its stub types the return as Any | csr_matrix,
-    # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
-    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment, no-untyped-call]
+    # scikit-learn 1.9 inserted unique_labels_ as the 2nd return value, so index from the end to
+    # support both the 4-tuple (<1.9) and 5-tuple (>=1.9) layouts; sample_weight is always last.
+    _checked = _check_targets(y_true, y_pred)  # type: ignore[no-untyped-call]
+    y_true, y_pred = _checked[-3], _checked[-2]
     if is_binary:
         tp, fp, _fn, _tn = get_classification_labels(y_true, y_pred)
     else:
@@ -688,9 +695,10 @@ def false_omission_rate(
     ValueError
         If positive_class is None for multiclass problem.
     """
-    # _check_targets returns ndarray but its stub types the return as Any | csr_matrix,
-    # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
-    _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment, no-untyped-call]
+    # scikit-learn 1.9 inserted unique_labels_ as the 2nd return value, so index from the end to
+    # support both the 4-tuple (<1.9) and 5-tuple (>=1.9) layouts; sample_weight is always last.
+    _checked = _check_targets(y_true, y_pred)  # type: ignore[no-untyped-call]
+    y_true, y_pred = _checked[-3], _checked[-2]
     if is_binary:
         _tp, _fp, fn, tn = get_classification_labels(y_true, y_pred)
     else:
@@ -795,9 +803,10 @@ def markedness_score(
         is_binary: bool = True,
         positive_class: str | int | None = None,
     ) -> float:
-        # _check_targets returns ndarray but its stub types the return as Any | csr_matrix,
-        # which is incompatible with the Sequence | ndarray | Series annotation on y_true/y_pred.
-        _problem_true, y_true, y_pred, _ = _check_targets(y_true, y_pred)  # type: ignore[assignment, no-untyped-call]
+        # scikit-learn 1.9 inserted unique_labels_ as the 2nd return value, so index from the end to
+        # support both the 4-tuple (<1.9) and 5-tuple (>=1.9) layouts; sample_weight is always last.
+        _checked = _check_targets(y_true, y_pred)  # type: ignore[no-untyped-call]
+        y_true, y_pred = _checked[-3], _checked[-2]
         if is_binary:
             tp, fp, _fn, _tn = get_classification_labels(y_true, y_pred)
         else:
