@@ -82,13 +82,17 @@ select = [
     "SIM",   # flake8-simplify
     "TCH",   # flake8-type-checking
     "RUF",   # Ruff-specific rules
+    "D",     # pydocstyle
 ]
 ignore = [
     "E501",   # Line too long (handled by formatter)
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["ARG", "S101"]  # Allow unused arguments and assert in tests
+"tests/*" = ["ARG", "S101", "D"]  # Allow unused arguments, assert and missing docstrings in tests
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
 
 [tool.ruff.lint.isort]
 known-first-party = ["sklearn_other_metrics"]

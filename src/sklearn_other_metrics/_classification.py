@@ -11,8 +11,9 @@ def get_classification_labels(
     y_true: Sequence[int] | np.ndarray | pd.Series,
     y_pred: Sequence[int] | np.ndarray | pd.Series,
 ) -> tuple[int, int, int, int]:
-    """Calculates the true positive, false positive, false negative and true negative values for a classification
-    problem.
+    """Calculate the classification confusion-matrix counts for a binary problem.
+
+    Returns the true positive, false positive, false negative and true negative values.
 
     Parameters
     ----------
@@ -52,7 +53,7 @@ def specificity_score(
     is_binary: bool = True,
     positive_class: str | int | None = None,
 ) -> float:
-    """Calculates the specificity of a classification problem.
+    """Calculate the specificity of a classification problem.
 
     Parameters
     ----------
@@ -98,8 +99,9 @@ def average_specificity_score(
     y_true: Sequence[int] | np.ndarray | pd.Series,
     y_pred: Sequence[int] | np.ndarray | pd.Series,
 ) -> float:
-    """Calculates the average specificity score. Used for when we have more than 2 classes and want our models' average
-    performance for each class.
+    """Calculate the average specificity score.
+
+    Used for when we have more than 2 classes and want our models' average performance for each class.
 
     Parameters
     ----------
@@ -128,7 +130,7 @@ def sensitivity_score(
     is_binary: bool = True,
     positive_class: str | int | None = None,
 ) -> float:
-    """This is exactly the same as recall.
+    """Compute the sensitivity score, which is exactly the same as recall.
 
     Parameters
     ----------
@@ -174,8 +176,9 @@ def average_sensitivity_score(
     y_true: Sequence[int] | np.ndarray | pd.Series,
     y_pred: Sequence[int] | np.ndarray | pd.Series,
 ) -> float:
-    """Calculates the average sensitivity score. Used for when we have more than 2 classes and want our models' average
-    performance for each class.
+    """Calculate the average sensitivity score.
+
+    Used for when we have more than 2 classes and want our models' average performance for each class.
 
     Parameters
     ----------
@@ -204,7 +207,7 @@ def power_score(
     is_binary: bool = True,
     positive_class: str | int | None = None,
 ) -> float:
-    """This is just another way of saying sensitivity.
+    """Compute the power score, another name for sensitivity.
 
     Parameters
     ----------
@@ -228,7 +231,7 @@ def average_power_score(
     y_true: Sequence[int] | np.ndarray | pd.Series,
     y_pred: Sequence[int] | np.ndarray | pd.Series,
 ) -> float:
-    """This is another way of saying average_sensitivity_score.
+    """Compute the average power score, another name for the average sensitivity score.
 
     Parameters
     ----------
@@ -250,8 +253,10 @@ def negative_predictive_score(
     is_binary: bool = True,
     positive_class: str | int | None = None,
 ) -> float:
-    """Also known as Type II error score. Calculates the percentage of true negatives we correctly identified
-    compared to the number of true negative and false negatives.
+    """Calculate the negative predictive score, also known as the Type II error score.
+
+    Computes the percentage of true negatives we correctly identified compared to the number of true negative and false
+    negatives.
 
     Parameters
     ----------
@@ -299,8 +304,9 @@ def average_negative_predictive_score(
     y_true: Sequence[int] | np.ndarray | pd.Series,
     y_pred: Sequence[int] | np.ndarray | pd.Series,
 ) -> float:
-    """Calculates the average negative predictive score. Used for when we have more than 2 classes and want our models'
-    average performance for each class.
+    """Calculate the average negative predictive score.
+
+    Used for when we have more than 2 classes and want our models' average performance for each class.
 
     Parameters
     ----------
@@ -329,8 +335,9 @@ def false_negative_score(
     is_binary: bool = True,
     positive_class: str | int | None = None,
 ) -> float:
-    """The inverse of our false positive score, calculates the number of false negatives compared to the number of false
-    negatives and true positives.
+    """Calculate the false negative score, the inverse of the false positive score.
+
+    Computes the number of false negatives compared to the number of false negatives and true positives.
 
     Parameters
     ----------
@@ -376,8 +383,9 @@ def average_false_negative_score(
     y_true: Sequence[int] | np.ndarray | pd.Series,
     y_pred: Sequence[int] | np.ndarray | pd.Series,
 ) -> float:
-    """Calculates the average false negative score. Used for when we have more than 2 classes and want our models'
-    average performance for each class.
+    """Calculate the average false negative score.
+
+    Used for when we have more than 2 classes and want our models' average performance for each class.
 
     Parameters
     ----------
@@ -406,7 +414,7 @@ def type_two_error_score(
     is_binary: bool = True,
     positive_class: str | int | None = None,
 ) -> float:
-    """This is exactly the same as false negative score.
+    """Compute the Type II error score, which is exactly the same as the false negative score.
 
     Parameters
     ----------
@@ -430,7 +438,7 @@ def average_type_two_error_score(
     y_true: Sequence[int] | np.ndarray | pd.Series,
     y_pred: Sequence[int] | np.ndarray | pd.Series,
 ) -> float:
-    """This is exactly the same as average false negative score.
+    """Compute the average Type II error score, the same as the average false negative score.
 
     Parameters
     ----------
@@ -452,7 +460,7 @@ def false_positive_score(
     is_binary: bool = True,
     positive_class: str | int | None = None,
 ) -> float:
-    """Calculates the ratio of false positives to false positives and true negatives.
+    """Calculate the ratio of false positives to false positives and true negatives.
 
     Parameters
     ----------
@@ -498,8 +506,9 @@ def average_false_positive_score(
     y_true: Sequence[int] | np.ndarray | pd.Series,
     y_pred: Sequence[int] | np.ndarray | pd.Series,
 ) -> float:
-    """Calculates the average false positive score. Used for when we have more than 2 classes and want our models'
-    average performance for each class.
+    """Calculate the average false positive score.
+
+    Used for when we have more than 2 classes and want our models' average performance for each class.
 
     Parameters
     ----------
@@ -528,7 +537,7 @@ def type_one_error_score(
     is_binary: bool = True,
     positive_class: str | int | None = None,
 ) -> float:
-    """This is exactly the same as false positive score.
+    """Compute the Type I error score, which is exactly the same as the false positive score.
 
     Parameters
     ----------
@@ -552,7 +561,7 @@ def average_type_one_error_score(
     y_true: Sequence[int] | np.ndarray | pd.Series,
     y_pred: Sequence[int] | np.ndarray | pd.Series,
 ) -> float:
-    """This is exactly the same as average false positive score.
+    """Compute the average Type I error score, the same as the average false positive score.
 
     Parameters
     ----------
@@ -574,7 +583,7 @@ def false_discovery_score(
     is_binary: bool = True,
     positive_class: str | int | None = None,
 ) -> float:
-    """Calculates the ratio of false positives to false positives and true positives.
+    """Calculate the ratio of false positives to false positives and true positives.
 
     Parameters
     ----------
@@ -620,8 +629,9 @@ def average_false_discovery_score(
     y_true: Sequence[int] | np.ndarray | pd.Series,
     y_pred: Sequence[int] | np.ndarray | pd.Series,
 ) -> float:
-    """Calculates the average false discovery score. Used for when we have more than 2 classes and want our models'
-    average performance for each class.
+    """Calculate the average false discovery score.
+
+    Used for when we have more than 2 classes and want our models' average performance for each class.
 
     Parameters
     ----------
@@ -650,7 +660,7 @@ def false_omission_rate(
     is_binary: bool = True,
     positive_class: str | int | None = None,
 ) -> float:
-    """Calculates the ratio of false negatives to false negatives and true negatives.
+    """Calculate the ratio of false negatives to false negatives and true negatives.
 
     Parameters
     ----------
@@ -696,8 +706,9 @@ def average_false_omission_rate(
     y_true: Sequence[int] | np.ndarray | pd.Series,
     y_pred: Sequence[int] | np.ndarray | pd.Series,
 ) -> float:
-    """Calculates the average false omission rate. Used for when we have more than 2 classes and want our models'
-    average performance for each class.
+    """Calculate the average false omission rate.
+
+    Used for when we have more than 2 classes and want our models' average performance for each class.
 
     Parameters
     ----------
@@ -756,7 +767,7 @@ def markedness_score(
     is_binary: bool = True,
     positive_class: str | int | None = None,
 ) -> float:
-    """Calculates the markedness score, or the precision + negative predictive score - 1.
+    """Calculate the markedness score, or the precision + negative predictive score - 1.
 
     Parameters
     ----------
@@ -810,7 +821,7 @@ def likelihood_ratio_positive(
     is_binary: bool = True,
     positive_class: str | int | None = None,
 ) -> float:
-    """Calculates the likelihood ratio positive, or sensitivity / (1 - specificity).
+    """Calculate the likelihood ratio positive, or sensitivity / (1 - specificity).
 
     Parameters
     ----------
@@ -838,7 +849,7 @@ def likelihood_ratio_negative(
     is_binary: bool = True,
     positive_class: str | int | None = None,
 ) -> float:
-    """Calculates the likelihood ratio negative, or specificity / (1 - sensitivity).
+    """Calculate the likelihood ratio negative, or specificity / (1 - sensitivity).
 
     Parameters
     ----------

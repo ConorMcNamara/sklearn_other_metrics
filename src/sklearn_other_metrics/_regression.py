@@ -16,7 +16,7 @@ def adjusted_r2_score(
     features_vector: Sequence[str] | np.ndarray | pd.Series | None = None,
     num_features: int | None = None,
 ) -> float:
-    """Calculates an adjusted R-squared that penalizes models that use too many superfluous features.
+    """Calculate an adjusted R-squared that penalizes models that use too many superfluous features.
 
     Parameters
     ----------
@@ -67,7 +67,7 @@ def adjusted_explained_variance_score(
     features_vector: Sequence[str] | np.ndarray | pd.Series | None = None,
     num_features: int | None = None,
 ) -> float:
-    """Calculates an adjusted explained_variance_score that penalizes models that use too many superfluous features.
+    """Calculate an adjusted explained_variance_score that penalizes models that use too many superfluous features.
 
     Parameters
     ----------
@@ -116,7 +116,7 @@ def mape_score(
     y_true: Sequence[float] | np.ndarray | pd.Series,
     y_pred: Sequence[float] | np.ndarray | pd.Series,
 ) -> float:
-    """Calculates the Mean Absolute Percentage Error, a common metric used for Time Series Problems.
+    """Calculate the Mean Absolute Percentage Error, a common metric used for Time Series Problems.
 
     Parameters
     ----------
@@ -148,8 +148,9 @@ def smape_score(
     y_true: Sequence[float] | np.ndarray | pd.Series,
     y_pred: Sequence[float] | np.ndarray | pd.Series,
 ) -> float:
-    """Calculates the Symmetric Mean Absolute Percentage Error. Used when there are zeros in our y_true that would cause
-    MAPE to be undefined.
+    """Calculate the Symmetric Mean Absolute Percentage Error.
+
+    Used when there are zeros in our y_true that would cause MAPE to be undefined.
 
     Parameters
     ----------
@@ -176,7 +177,7 @@ def root_mean_squared_error(
     y_true: Sequence[float] | np.ndarray | pd.Series,
     y_pred: Sequence[float] | np.ndarray | pd.Series,
 ) -> float:
-    """Calculates the Root Mean Squared Error for regression problems.
+    """Calculate the Root Mean Squared Error for regression problems.
 
     Parameters
     ----------
@@ -204,7 +205,9 @@ def group_mean_log_mae(
     groups: Sequence[Any] | np.ndarray | pd.Series,
     floor: float = 1e-9,
 ) -> float:
-    """Calculates the Group Mean Log Mean Absolute Error. Used in a Kaggle competition.
+    """Calculate the Group Mean Log Mean Absolute Error.
+
+    Used in a Kaggle competition.
 
     Parameters
     ----------
