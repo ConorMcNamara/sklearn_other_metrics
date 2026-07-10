@@ -7,8 +7,35 @@ on:
     branches: [master]
 
 jobs:
+  setup:
+    name: Resolve Python versions
+    runs-on: ubuntu-latest
+    outputs:
+      python-versions: ${{ steps.versions.outputs.python-versions }}
+      min-version: ${{ steps.versions.outputs.min-version }}
+      max-version: ${{ steps.versions.outputs.max-version }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse supported versions from pyproject.toml
+        id: versions
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import tomllib, json
+          data = tomllib.load(open("pyproject.toml", "rb"))
+          prefix = "Programming Language :: Python :: 3."
+          versions = sorted(
+              (c.rsplit("::", 1)[-1].strip()
+               for c in data["project"]["classifiers"] if c.startswith(prefix)),
+              key=lambda v: int(v.split(".")[1]),
+          )
+          print("python-versions=" + json.dumps(versions))
+          print("min-version=" + versions[0])
+          print("max-version=" + versions[-1])
+          PY
+
   lint:
     name: Lint and Type Check
+    needs: setup
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,7 +46,7 @@ jobs:
           enable-cache: true
 
       - name: Install dependencies
-        run: uv sync --locked --extra dev --python 3.13
+        run: uv sync --locked --extra dev --python ${{ needs.setup.outputs.max-version }}
 
       - name: Run ruff linter
         run: uv run ruff check .
@@ -32,12 +59,13 @@ jobs:
 
   test:
     name: Test Python ${{ matrix.python-version }} on ${{ matrix.os }}
+    needs: setup
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ["3.13", "3.14"]
+        python-version: ${{ fromJson(needs.setup.outputs.python-versions) }}
 
     steps:
       - uses: actions/checkout@v4
@@ -54,7 +82,7 @@ jobs:
         run: uv run pytest --cov=src --cov-report=xml --cov-report=term-missing
 
       - name: Upload coverage to Codecov
-        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.13'
+        if: matrix.os == 'ubuntu-latest' && matrix.python-version == needs.setup.outputs.max-version
         uses: codecov/codecov-action@v4
         with:
           file: ./coverage.xml
