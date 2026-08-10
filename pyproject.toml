@@ -26,21 +26,19 @@ classifiers = [
 dependencies = [
     "numpy>=2.0.0",
     "pandas>=2.0.0",
-    "pytest>=9.0.3",
-    "pytest-cov==7.0.0",
     "scikit-learn>=1.4.0",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=8.0.0",
+    "pytest>=9.0.3",
     "pytest-cov>=4.1.0",
     "zuban",
     "ruff>=0.6.0",
     "pre-commit>=3.6.0",
 ]
 test = [
-    "pytest>=8.0.0",
+    "pytest>=9.0.3",
     "pytest-cov>=4.1.0",
 ]
 docs = [
