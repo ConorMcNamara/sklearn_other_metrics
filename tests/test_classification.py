@@ -411,7 +411,7 @@ class TestLikelihoodRatios:
         "y_true, y_pred, is_binary, positive_class, expected",
         [
             ([1, 0, 1, 0], [1, 0, 0, 1], True, None, 1.0),
-            ([1, 1, 2, 2, 3, 3], [1, 2, 3, 3, 2, 1], False, 3, 0.5),
+            ([1, 1, 2, 2, 3, 3], [1, 2, 3, 3, 2, 1], False, 3, 2.0),
         ],
     )
     def test_likelihood_ratio_negative_calculation(

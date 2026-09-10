@@ -57,7 +57,7 @@ def adjusted_r2_score(
         n = len(y_true)
     else:
         raise ValueError("No features available to calculate adjusted score")
-    r2 = r2_score(y_true, y_pred) if r2_score(y_true, y_pred) > 0 else 0
+    r2 = float(r2_score(y_true, y_pred))
     return 1 - (1 - r2) * (n - 1) / (n - p - 1)
 
 
@@ -108,7 +108,7 @@ def adjusted_explained_variance_score(
         n = len(y_true)
     else:
         raise ValueError("No features available to calculate adjusted score")
-    evs = explained_variance_score(y_true, y_pred) if explained_variance_score(y_true, y_pred) > 0 else 0
+    evs = float(explained_variance_score(y_true, y_pred))
     return 1 - (1 - evs) * (n - 1) / (n - p - 1)
 
 
@@ -168,9 +168,13 @@ def smape_score(
     )
     # np.asarray() casts to ndarray so the - operator is valid; _check_reg_targets already
     # returns arrays at runtime but its stub doesn't narrow the type away from Sequence[float].
-    error = np.abs(np.asarray(y_true) - np.asarray(y_pred))
-    total = np.abs(np.asarray(y_true)) + np.abs(np.asarray(y_pred))
-    return float(100 * np.sum(error / total) / len(error))
+    y_true_arr = np.asarray(y_true)
+    y_pred_arr = np.asarray(y_pred)
+    error = np.abs(y_true_arr - y_pred_arr)
+    total = np.abs(y_true_arr) + np.abs(y_pred_arr)
+    nonzero = total != 0
+    ratios = np.where(nonzero, error / np.where(nonzero, total, 1), 0.0)
+    return float(100 * np.sum(ratios) / len(error))
 
 
 def root_mean_squared_error(
