@@ -57,7 +57,7 @@ def adjusted_r2_score(
         n = len(y_true)
     else:
         raise ValueError("No features available to calculate adjusted score")
-    r2 = r2_score(y_true, y_pred)
+    r2 = float(r2_score(y_true, y_pred))
     return 1 - (1 - r2) * (n - 1) / (n - p - 1)
 
 
@@ -108,7 +108,7 @@ def adjusted_explained_variance_score(
         n = len(y_true)
     else:
         raise ValueError("No features available to calculate adjusted score")
-    evs = explained_variance_score(y_true, y_pred)
+    evs = float(explained_variance_score(y_true, y_pred))
     return 1 - (1 - evs) * (n - 1) / (n - p - 1)
 
 
