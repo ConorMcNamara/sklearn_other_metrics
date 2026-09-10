@@ -39,15 +39,19 @@ def get_classification_labels(
     _checked = _check_targets(y_true, y_pred)  # type: ignore[no-untyped-call]
     y_true = cast("np.ndarray", _checked[-3])
     y_pred = cast("np.ndarray", _checked[-2])
-    if len(np.unique(y_true)) > 2:
+    unique_true = np.unique(y_true)
+    unique_pred = np.unique(y_pred)
+    if len(unique_true) > 2:
         raise ValueError("More than two classes present in y_true for a binary classification problem")
-    if len(np.unique(y_pred)) > 2:
+    if len(unique_pred) > 2:
         raise ValueError("More than two classes present in y_pred for a binary classification problem")
-    label_1 = sorted(np.unique(y_true))[1]
-    label_0 = sorted(np.unique(y_true))[0]
+    if len(unique_true) < 2:
+        raise ValueError("Less than two classes present in y_true for a binary classification problem")
+    label_1 = sorted(unique_true)[1]
+    label_0 = sorted(unique_true)[0]
     true_positive = len(np.where((y_true == label_1) & (y_pred == label_1))[0])
     false_positive = len(np.where((y_true == label_0) & (y_pred == label_1))[0])
-    false_negative = len(np.where((y_true == label_1) * (y_pred == label_0))[0])
+    false_negative = len(np.where((y_true == label_1) & (y_pred == label_0))[0])
     true_negative = len(np.where((y_true == label_0) & (y_pred == label_0))[0])
     return true_positive, false_positive, false_negative, true_negative
 
@@ -98,7 +102,10 @@ def specificity_score(
                 raise TypeError("positive_class must be str or int for multiclass problem")
         else:
             raise ValueError("Cannot calculate specificity score with positive_class=None for multiclass problem")
-    return tn / (tn + fp)
+    denom = tn + fp
+    if denom == 0:
+        return 0.0
+    return tn / denom
 
 
 def average_specificity_score(
@@ -176,7 +183,10 @@ def sensitivity_score(
                 raise TypeError("positive_class must be str or int for multiclass problem")
         else:
             raise ValueError("Cannot calculate sensitivity score with positive_class=None for multiclass problem")
-    return tp / (tp + fn)
+    denom = tp + fn
+    if denom == 0:
+        return 0.0
+    return tp / denom
 
 
 def average_sensitivity_score(
@@ -260,10 +270,10 @@ def negative_predictive_score(
     is_binary: bool = True,
     positive_class: str | int | None = None,
 ) -> float:
-    """Calculate the negative predictive score, also known as the Type II error score.
+    """Calculate the negative predictive value.
 
-    Computes the percentage of true negatives we correctly identified compared to the number of true negative and false
-    negatives.
+    Computes the proportion of true negatives among all samples predicted as negative (true negatives and false
+    negatives).
 
     Parameters
     ----------
@@ -305,7 +315,10 @@ def negative_predictive_score(
             raise ValueError(
                 "Cannot calculate negative predictive score with positive_class=None for multiclass problem"
             )
-    return tn / (tn + fn)
+    denom = tn + fn
+    if denom == 0:
+        return 0.0
+    return tn / denom
 
 
 def average_negative_predictive_score(
@@ -343,9 +356,9 @@ def false_negative_score(
     is_binary: bool = True,
     positive_class: str | int | None = None,
 ) -> float:
-    """Calculate the false negative score, the inverse of the false positive score.
+    """Calculate the false negative rate (miss rate).
 
-    Computes the number of false negatives compared to the number of false negatives and true positives.
+    Computes the proportion of false negatives among all actual positives (false negatives and true positives).
 
     Parameters
     ----------
@@ -385,7 +398,10 @@ def false_negative_score(
                 raise TypeError("positive_class must be str or int for multiclass problem")
         else:
             raise ValueError("Cannot calculate false negative score with positive_class=None for multiclass problem")
-    return fn / (fn + tp)
+    denom = fn + tp
+    if denom == 0:
+        return 0.0
+    return fn / denom
 
 
 def average_false_negative_score(
@@ -509,7 +525,10 @@ def false_positive_score(
                 raise TypeError("positive_class must be str or int for multiclass problem")
         else:
             raise ValueError("Cannot calculate false positive score with positive_class=None for multiclass problem")
-    return fp / (fp + tn)
+    denom = fp + tn
+    if denom == 0:
+        return 0.0
+    return fp / denom
 
 
 def average_false_positive_score(
@@ -633,7 +652,10 @@ def false_discovery_score(
                 raise TypeError("positive_class must be str or int for multiclass problem")
         else:
             raise ValueError("Cannot calculate false discovery score with positive_class=None for multiclass problem")
-    return fp / (fp + tp)
+    denom = fp + tp
+    if denom == 0:
+        return 0.0
+    return fp / denom
 
 
 def average_false_discovery_score(
@@ -711,7 +733,10 @@ def false_omission_rate(
                 raise TypeError("positive_class must be str or int for multiclass problem")
         else:
             raise ValueError("Cannot calculate false omission rate with positive_class=None for multiclass problem")
-    return fn / (fn + tn)
+    denom = fn + tn
+    if denom == 0:
+        return 0.0
+    return fn / denom
 
 
 def average_false_omission_rate(
@@ -819,7 +844,10 @@ def markedness_score(
                     raise TypeError("positive_class must be str or int for multiclass problem")
             else:
                 raise ValueError("Cannot calculate precision score with positive_class=None for multiclass problem")
-        return tp / (tp + fp)
+        denom = tp + fp
+        if denom == 0:
+            return 0.0
+        return tp / denom
 
     return (
         precision_score(y_true, y_pred, is_binary=is_binary, positive_class=positive_class)
@@ -851,9 +879,12 @@ def likelihood_ratio_positive(
     -------
     The positive likelihood ratio
     """
-    return sensitivity_score(y_true, y_pred, is_binary=is_binary, positive_class=positive_class) / (
-        1 - specificity_score(y_true, y_pred, is_binary=is_binary, positive_class=positive_class)
-    )
+    sens = sensitivity_score(y_true, y_pred, is_binary=is_binary, positive_class=positive_class)
+    spec = specificity_score(y_true, y_pred, is_binary=is_binary, positive_class=positive_class)
+    fpr = 1 - spec
+    if fpr == 0:
+        return float("inf")
+    return sens / fpr
 
 
 def likelihood_ratio_negative(
@@ -862,7 +893,7 @@ def likelihood_ratio_negative(
     is_binary: bool = True,
     positive_class: str | int | None = None,
 ) -> float:
-    """Calculate the likelihood ratio negative, or specificity / (1 - sensitivity).
+    """Calculate the likelihood ratio negative, or (1 - sensitivity) / specificity.
 
     Parameters
     ----------
@@ -879,6 +910,8 @@ def likelihood_ratio_negative(
     -------
     The negative likelihood ratio
     """
-    return specificity_score(y_true, y_pred, is_binary=is_binary, positive_class=positive_class) / (
-        1 - sensitivity_score(y_true, y_pred, is_binary=is_binary, positive_class=positive_class)
-    )
+    sens = sensitivity_score(y_true, y_pred, is_binary=is_binary, positive_class=positive_class)
+    spec = specificity_score(y_true, y_pred, is_binary=is_binary, positive_class=positive_class)
+    if spec == 0:
+        return float("inf")
+    return (1 - sens) / spec
